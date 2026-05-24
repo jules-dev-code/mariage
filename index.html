@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanina & Yvan — Mariage 2026</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+<!-- Librairies externes -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+<!-- Ton CSS -->
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav id="nav">
+  <div class="nav-brand">Vanina &amp; Yvan</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Accueil</a></li>
+    <li><a href="#mot">Message</a></li>
+    <li><a href="#programme">Programme</a></li>
+    <li><a href="#infos">Infos</a></li>
+  </ul>
+  <button class="nav-admin-btn" onclick="openPwd()">⬡ Administration</button>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section id="hero">
+  <div class="hero-photo" id="heroBg"></div>
+  <div class="hero-overlay" id="heroOverlay" style="display:none"></div>
+  <div class="hero-embers" id="embers"></div>
+  <div class="hero-texture" id="heroTexture"></div>
+  <div class="hero-grid" id="heroGrid"></div>
+  <div class="hero-content">
+    <span class="hero-eyebrow">Vous êtes cordialement invité(e) à célébrer</span>
+    <div class="hero-names">
+      <span class="name1">Vanina</span>
+      <span class="amp">&amp;</span>
+      <span class="name2">Yvan</span>
+    </div>
+    <div class="hero-divider"><span>◆</span></div>
+    <span class="hero-date">Samedi · 27 Juin 2026 · Nyom Messassi au lieux dit 600 Lots · Yaoundé</span>
+    <div class="countdown">
+      <div class="cd-item"><span class="cd-num" id="cdJ">--</span><span class="cd-label">Jours</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdH">--</span><span class="cd-label">Heures</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdM">--</span><span class="cd-label">Minutes</span></div>
+      <div class="cd-item"><span class="cd-num" id="cdS">--</span><span class="cd-label">Secondes</span></div>
+    </div>
+  </div>
+  <div class="hero-scroll" onclick="document.getElementById('mot').scrollIntoView({behavior:'smooth'})">
+    <span>Défiler</span><div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══ MOT DES MARIÉS ═══ -->
+<section id="mot">
+  <div class="mot-content">
+    <span class="lbl">◆ Un mot des mariés ◆</span>
+    <div class="gbar"></div>
+    <p class="mot-text">« Ce soir, nous célébrons bien plus qu'une union — nous célébrons l'amour, l'amitié et tous ces moments précieux qui nous ont conduits jusqu'ici. Votre présence à nos côtés est notre plus beau cadeau. »</p>
+    <span class="mot-sig">— Vanina &amp; Yvan</span>
+  </div>
+</section>
+
+<!-- ═══ DRESS CODE ═══ -->
+<section id="dresscode" class="section section-center">
+  <span class="lbl">◆ Code vestimentaire ◆</span>
+  <h2 class="ttl">Palette de la soirée</h2>
+  <div class="gbar"></div>
+  <p class="sub">Nous vous invitons à vous vêtir dans ces teintes pour une soirée harmonieuse</p>
+  <div class="dress-grid">
+    <div class="dress-item"><div class="dress-swatch" style="background:#CC5500"></div><h3>Orange Brûlé</h3><p>Couleur principale de la soirée</p></div>
+    <div class="dress-item"><div class="dress-swatch" style="background:#D4820A"></div><h3>Ambre</h3><p>Tons dorés et chauds</p></div>
+    <div class="dress-item"><div class="dress-swatch" style="background:#B87333"></div><h3>Cuivre</h3><p>Accents métalliques élégants</p></div>
+    <div class="dress-item"><div class="dress-swatch" style="background:#1A0E00"></div><h3>Noir Profond</h3><p>Smoking ou costume sombre</p></div>
+    <div class="dress-item"><div class="dress-swatch" style="background:#FDF6EE;border:1px solid #ddd"></div><h3>Crème</h3><p>Tenues claires autorisées</p></div>
+  </div>
+</section>
+
+<!-- ═══ PROGRAMME ═══ -->
+<section id="programme" class="section section-center">
+  <span class="lbl">◆ Déroulé de la soirée ◆</span>
+  <h2 class="ttl ttl-w">Programme</h2>
+  <div class="gbar"></div>
+  <div class="timeline">
+    <div class="tl-item"><div class="tl-time"><span>16:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Accueil &amp; check-in</h3><p>Réception des invités à l'entrée du château</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>17:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Cérémonie</h3><p>Échange des vœux dans la salle de cérémonie</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>18:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Vin d'honneur</h3><p>Cocktail &amp; canapés dans les jardins illuminés</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>20:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Dîner de gala</h3><p>Menu gastronomique 5 services en grande salle</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>22:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Pièce montée &amp; discours</h3><p>Coupure du gâteau &amp; toast des témoins</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>23:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Soirée dansante</h3><p>DJ set &amp; piste de danse jusqu'à l'aube</p></div></div>
+  </div>
+</section>
+
+<!-- ═══ INFOS ═══ -->
+<section id="infos" class="section section-center">
+  <span class="lbl">◆ Informations pratiques ◆</span>
+  <h2 class="ttl">Le soir du mariage</h2>
+  <div class="gbar"></div>
+  <div class="info-grid">
+    <div class="info-card"><span class="info-icon">📍</span><h3>Lieu</h3><p>Nyom Messassi <br>lieux dit 600 Lots<br>Yaoundé, Cameroun</p></div>
+    <div class="info-card"><span class="info-icon">🕔</span><h3>Horaires</h3><p>Accueil dès 16h30<br>Cérémonie à 17h00<br>Fin prévue à 04h00</p></div>
+    <div class="info-card"><span class="info-icon">👔</span><h3>Tenue</h3><p>Tenue de soirée<br>Smoking / Robe longue<br>Palette orange &amp; noir</p></div>
+    <div class="info-card"><span class="info-icon">🅿️</span><h3>Accès</h3><p>Parking privé sur place<br>Hors de la barrière<br>Valet parking disponible</p></div>
+    <div class="info-card"><span class="info-icon">🍽️</span><h3>Menu</h3><p>Gastronomique 5 services<br>Options végétariennes<br>Allergies sur demande</p></div>
+    <div class="info-card"><span class="info-icon">📞</span><h3>Contact</h3><p>Pour toute question<br>+237 678 99 56 17<br>vanina.yvan@mariage.fr</p></div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer>
+  <span class="footer-brand">Vanina &amp; Yvan</span>
+  <div class="gbar"></div>
+  <p class="footer-sub">27 Juin 2026 · Yaoundé, Cameroun · Avec tout notre amour</p>
+</footer>
+
+<!-- ═══ MOT DE PASSE ADMIN ═══ -->
+<div id="pwdOverlay">
+  <div class="pwd-box">
+    <div class="ttl" style="color:white;font-size:1.8rem">Administration</div>
+    <div class="lbl" style="margin:6px 0 0">◆ Accès sécurisé ◆</div>
+    <p style="color:rgba(255,255,255,.3);font-size:.88rem;margin-top:18px;font-weight:300">Entrez le mot de passe organisateur</p>
+    <input class="pwd-input" id="pwdIn" type="password" placeholder="Mot de passe..." onkeypress="if(event.key==='Enter')chkPwd()">
+    <div style="display:flex;gap:10px">
+      <button class="btn btn-burn" style="flex:1" onclick="chkPwd()">Connexion →</button>
+      <button class="btn btn-ghost" style="flex:1" onclick="closePwd()">Annuler</button>
+    </div>
+    <p class="pwd-hint">MOT DE PASSE PAR DÉFAUT : mariage2025</p>
+  </div>
+</div>
+
+<!-- ═══ PANEL ADMIN ═══ -->
+<div id="admin">
+  <div class="adm-header">
+    <div class="adm-title">✦ Tableau de bord — Gestion des invités</div>
+    <div class="adm-stats">
+      <div class="adm-stat"><span class="adm-stat-n" id="sT">0</span><span class="adm-stat-l">Total</span></div>
+      <div class="adm-stat"><span class="adm-stat-n" id="sA">0</span><span class="adm-stat-l">Arrivés</span></div>
+      <div class="adm-stat"><span class="adm-stat-n" id="sP">0</span><span class="adm-stat-l">En attente</span></div>
+      <div class="adm-stat"><span class="adm-stat-n" id="sPct">0%</span><span class="adm-stat-l">Présence</span></div>
+      <div class="adm-stat"><span class="adm-stat-n" id="sV">0</span><span class="adm-stat-l">VIP</span></div>
+    </div>
+    <button class="adm-close" onclick="closeAdmin()">✕ Fermer</button>
+  </div>
+  <div class="adm-progress">
+    <div class="prog-wrap"><div class="prog-fill" id="progF" style="width:0%"></div></div>
+    <div class="prog-info"><span id="progL">0 en attente</span><span id="progR">0 / 0 présents</span></div>
+  </div>
+  <div class="adm-body">
+    <!-- GAUCHE -->
+    <div class="adm-left">
+      <div class="scanner-box">
+        <div class="panel-title">📷 Scanner QR Code</div>
+        <div id="qr-reader"></div>
+        <div class="scan-result" id="scanRes">
+          <div class="scan-name" id="scanNm"></div>
+          <div class="scan-detail" id="scanDt"></div>
+          <div id="scanAct"></div>
+        </div>
+        <button class="btn btn-burn mt10" style="width:100%;padding:12px" onclick="toggleScan()"><span id="scanTxt">▶ Démarrer le scanner</span></button>
+      </div>
+      <div>
+        <div class="panel-title">➕ Ajouter un invité</div>
+        <div class="form-row">
+          <div class="fgrp"><label class="flbl">Prénom</label><input class="fctl" id="nFn" type="text" placeholder="Marie"></div>
+          <div class="fgrp"><label class="flbl">Nom</label><input class="fctl" id="nLn" type="text" placeholder="Dupont"></div>
+        </div>
+        <div class="form-row">
+          <div class="fgrp"><label class="flbl">Civilité</label><select class="fctl" id="nTi"><option>M.</option><option>Mme</option><option>Dr</option><option>Pr</option><option>M. &amp; Mme</option></select></div>
+          <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="nTb" type="number" placeholder="1" min="1" max="30"></div>
+        </div>
+        <div class="fgrp"><label class="flbl">Zone</label><select class="fctl" id="nZn"><option value="vip">VIP</option><option value="famille">Famille</option><option value="amis" selected>Amis</option><option value="collegues">Collègues</option></select></div>
+        <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="nDt"><option value="">Standard</option><option value="🥗 Végétarien">Végétarien</option><option value="🌱 Végane">Végane</option><option value="🕌 Halal">Halal</option><option value="✡ Casher">Casher</option><option value="🚫 Sans gluten">Sans gluten</option></select></div>
+        <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="nNt" type="text" placeholder="Témoin, vient de loin..."></div>
+        <button class="btn btn-burn" style="width:100%;padding:13px" onclick="addGuest()">Ajouter l'invité</button>
+      </div>
+      <div>
+        <div class="panel-title">⚙️ Actions globales</div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="exportCSV()">↓ Exporter la liste (CSV)</button>
+          <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="printList()">🖨 Imprimer la liste physique</button>
+          <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="groupWA()">💬 WhatsApp remerciements groupé</button>
+        </div>
+      </div>
+      <div>
+        <div class="panel-title">⏱ Historique des arrivées</div>
+        <div id="arrLog" style="max-height:200px;overflow-y:auto;font-size:.82rem;color:rgba(255,255,255,.4)"><p style="font-style:italic">Aucune arrivée enregistrée</p></div>
+      </div>
+    </div>
+    <!-- DROITE -->
+    <div class="adm-right">
+      <div class="list-controls">
+        <input class="list-search" id="srch" type="text" placeholder="🔍  Rechercher par nom, prénom, table, zone..." oninput="renderList()">
+        <div class="ftabs">
+          <button class="ftab active" onclick="setF('all',this)">Tous</button>
+          <button class="ftab" onclick="setF('arrived',this)">Arrivés</button>
+          <button class="ftab" onclick="setF('pending',this)">En attente</button>
+          <button class="ftab" onclick="setF('vip',this)">VIP</button>
+        </div>
+      </div>
+      <div class="alpha-index" id="alphaIdx"></div>
+      <div id="gList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MODAL ÉDITION ═══ -->
+<div class="modal-ov" id="editMod">
+  <div class="modal">
+    <button class="modal-x" onclick="closeMod('editMod')">✕</button>
+    <div class="modal-ttl">Modifier l'invité</div>
+    <div class="modal-sub">◆ Informations ◆</div>
+    <input type="hidden" id="eId">
+    <div class="form-row">
+      <div class="fgrp"><label class="flbl">Prénom</label><input class="fctl" id="eFn" type="text"></div>
+      <div class="fgrp"><label class="flbl">Nom</label><input class="fctl" id="eLn" type="text"></div>
+    </div>
+    <div class="form-row">
+      <div class="fgrp"><label class="flbl">Civilité</label><select class="fctl" id="eTi"><option>M.</option><option>Mme</option><option>Dr</option><option>Pr</option><option>M. &amp; Mme</option></select></div>
+      <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="eTb" type="number" min="1" max="30"></div>
+    </div>
+    <div class="fgrp"><label class="flbl">Zone</label><select class="fctl" id="eZn"><option value="vip">VIP</option><option value="famille">Famille</option><option value="amis">Amis</option><option value="collegues">Collègues</option></select></div>
+    <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="eDt"><option value="">Standard</option><option value="🥗 Végétarien">Végétarien</option><option value="🌱 Végane">Végane</option><option value="🕌 Halal">Halal</option><option value="✡ Casher">Casher</option><option value="🚫 Sans gluten">Sans gluten</option></select></div>
+    <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="eNt" type="text"></div>
+    <div class="flex-end">
+      <button class="btn btn-ghost" onclick="closeMod('editMod')">Annuler</button>
+      <button class="btn btn-burn" onclick="saveEdit()">Enregistrer</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ ZONE PHOTO ═══ -->
+<div id="photoZone">
+  <div class="photo-drop" id="photoDrop"
+       onclick="document.getElementById('photoInput').click()"
+       ondragover="dragOver(event)" ondragleave="dragLeave(event)" ondrop="dropPhoto(event)">
+    <input type="file" id="photoInput" accept="image/*" onchange="loadPhoto(this.files[0])">
+    <img class="photo-preview" id="photoPreview" alt="Aperçu">
+    <span class="photo-drop-icon">📷</span>
+    <div class="photo-drop-txt">Glissez votre photo ici<br>ou cliquez pour choisir<span>JPG · PNG · WEBP</span></div>
+    <button class="photo-remove" id="photoRemove" onclick="removePhoto(event)">✕ Retirer la photo</button>
+  </div>
+</div>
+
+<!-- NOTIFICATION -->
+<div class="notif" id="notif"></div>
+
+<!-- ═══ TON JAVASCRIPT ═══ -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
