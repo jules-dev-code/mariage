@@ -3,7 +3,7 @@
 //  app.js — Connecté à Supabase
 // ================================================
 const SUPABASE_URL = "https://psxpjuvbdctmsfuudjbe.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzeHBqdXZiZGN0bXNmdXVkamJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwMjI5NTgsImV4cCI6MjA2MzU5ODk1OH0.r3A6TvAujn7wgD9HNWZ_eMECLqxqKzqIZJJf3Xhqe0o";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzeHBqdXZiZGN0bXNmdXVkamJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk2NTQ5NDAsImV4cCI6MjA5NTIzMDk0MH0.U5m-XQAFlYvGnc6DMUwhrsT8N7QeAj0GbylAfz_IMi8";
 
 // Client Supabase léger (sans librairie externe)
 const DB = {
