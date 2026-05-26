@@ -39,8 +39,8 @@ function hdrs() {
 // CONFIG
 const ADMIN_PWD = "mariage2025";
 const COUPLE    = "Vanina & Yvan";
-const VENUE     = "Château de Versailles, Paris";
-const WDATE     = new Date("2025-06-14T17:00:00");
+const VENUE     = "Nyom Messassi au lieux dit 600 Lots · Yaoundé";
+const WDATE     = new Date("2026-06-27T17:00:00");
 
 // STATE
 let guests  = [], curF = "all", curA = "all";
@@ -117,8 +117,8 @@ function chkPwd(){
   if($("pwdIn").value===ADMIN_PWD){closePwd();openAdmin();}
   else{$("pwdIn").style.borderColor="#8B2020";$("pwdIn").value="";setTimeout(()=>$("pwdIn").style.borderColor="",1400);notify("Mot de passe incorrect","err");}
 }
-function openAdmin(){$("admin").classList.add("open");$("nav").style.display="none";window.scrollTo(0,0);loadGuests();}
-function closeAdmin(){if(scanOn)stopScan();$("admin").classList.remove("open");$("nav").style.display="flex";}
+function openAdmin(){$("admin").classList.add("open");$("nav").style.display="none";window.scrollTo(0,0);loadGuests();$("photoZone").classList.add("visible");}
+function closeAdmin(){if(scanOn)stopScan();$("admin").classList.remove("open");$("nav").style.display="flex";$("photoZone").classList.remove("visible");}
 
 function updateStats(){
   const tot=guests.length, arr=guests.filter(g=>g.ar).length;
@@ -364,13 +364,6 @@ window.addEventListener("scroll",()=>{
 });
 
 document.addEventListener("DOMContentLoaded",function(){
-  const nav=$("nav");
-  const btn=document.createElement("button");
-  btn.className="nav-admin-btn";
-  btn.style.cssText="margin-right:8px;border-color:rgba(204,85,0,.25);font-size:.58rem";
-  btn.textContent="Photo";
-  btn.onclick=()=>$("photoZone").classList.toggle("visible");
-  nav.insertBefore(btn,nav.querySelector(".nav-admin-btn"));
   const d=document.createElement("div");
   d.id="loadingIndicator";
   d.style.cssText="display:none;position:fixed;inset:0;background:rgba(10,5,0,.85);z-index:9999;align-items:center;justify-content:center;flex-direction:column;gap:15px";
