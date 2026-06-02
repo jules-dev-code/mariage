@@ -254,8 +254,8 @@ async function genPDF(id){
     const qrDiv=document.createElement("div");
     qrDiv.style.cssText="position:absolute;left:-9999px;top:-9999px;width:128px;height:128px";
     document.body.appendChild(qrDiv);
-    new QRCode(qrDiv,{text:JSON.stringify({id:g.id,name:fn(g),table:g.tb,zone:g.zn}),width:128,height:128,colorDark:"#1A0E00",colorLight:"#FDF6EE",correctLevel:QRCode.CorrectLevel.H});
-    await new Promise(r=>setTimeout(r,400));
+new QRCode(qrDiv,{text:`https://mariage-beugueum-8494s-projects.vercel.app?inv=${g.id}`,width:128,height:128,colorDark:"#1A0E00",colorLight:"#FDF6EE",correctLevel:QRCode.CorrectLevel.H});
+await new Promise
     const qrImg=qrDiv.querySelector("canvas")?.toDataURL();
     document.body.removeChild(qrDiv);
     const {jsPDF}=window.jspdf;

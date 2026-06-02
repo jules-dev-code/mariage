@@ -253,6 +253,36 @@
 
 <!-- ═══ TON JAVASCRIPT ═══ -->
 <script src="js/app.js"></script>
+<script>
+// Auto check-in via URL
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  const invId = params.get('inv');
+  if(!invId) return;
 
+  // Attendre que les guests soient chargés
+  setTimeout(async function(){
+    const g = guests.find(x => x.id === invId);
+    if(!g){
+      alert('Invité introuvable : ' + invId);
+      return;
+    }
+
+    // Afficher la fiche
+    const msg = g.ar
+      ? `✓ ${g.ti} ${g.fn} ${g.ln} — Déjà enregistré(e)\nTable N° ${g.tb} · ${g.zn}`
+      : `Invité trouvé !\n\n${g.ti} ${g.fn} ${g.ln}\nTable N° ${g.tb} · ${g.zn}\n\nConfirmer l'arrivée ?`;
+
+    if(g.ar){
+      alert(msg);
+    } else {
+      if(confirm(msg)){
+        await toggleArrival(invId);
+        alert(`✓ Arrivée confirmée pour ${g.fn} ${g.ln} !`);
+      }
+    }
+  }, 2000);
+})();
+</script>
 </body>
 </html>
