@@ -178,9 +178,17 @@
         <div class="fgrp"><label class="flbl">Zone</label><select class="fctl" id="nZn"><option value="vip">VIP</option><option value="famille">Famille</option><option value="amis" selected>Amis</option><option value="collegues">Collègues</option></select></div>
         <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="nDt"><option value="">Standard</option><option value="🥗 Végétarien">Végétarien</option><option value="🌱 Végane">Végane</option><option value="🕌 Halal">Halal</option><option value="✡ Casher">Casher</option><option value="🚫 Sans gluten">Sans gluten</option></select></div>
         <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="nNt" type="text" placeholder="Témoin, vient de loin..."></div>
+        <div class="fgrp">
+        <label class="flbl">Téléphone WhatsApp</label>
+        <input class="fctl" id="nPhone" type="tel" placeholder="+237 6XX XX XX XX">
+        </div>
+        <div class="fgrp">
+        <label class="flbl">Téléphone WhatsApp</label>
+        <input class="fctl" id="ePhone" type="tel" placeholder="+237 6XX XX XX XX">
+        </div>
         <button class="btn btn-burn" style="width:100%;padding:13px" onclick="addGuest()">Ajouter l'invité</button>
-      </div>
-      <div>
+        </div>
+        <div>
         <div class="panel-title">⚙️ Actions globales</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="exportCSV()">↓ Exporter la liste (CSV)</button>
