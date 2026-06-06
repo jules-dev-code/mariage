@@ -348,7 +348,9 @@ function groupWA(){
     doc.setLineWidth(3);
     doc.rect(4,4,W-8,H-8,"S");
  
-    // Bordure intérieure fine
+
+DE 351 A LA FIN 
+ // Bordure intérieure fine
     doc.setDrawColor(212,130,10);
     doc.setLineWidth(0.5);
     doc.rect(7,7,W-14,H-14,"S");
@@ -359,11 +361,7 @@ function groupWA(){
  
     // Overlay dégradé
     doc.setFillColor(204,85,0);
-try {
-  if (doc.GState) {
-    doc.setGState(new doc.GState({ opacity: 0.15 }));
-  }
-} catch(e) {}
+    doc.setGState(new doc.GState({opacity:0.15}));
     doc.rect(0,0,W,62,"F");
     doc.setGState(new doc.GState({opacity:1}));
  
@@ -382,16 +380,9 @@ try {
     doc.ellipse(W/2, 36, 30, 28, "FD");
  
     // Photo dans ovale
-try {
-  if (COUPLE_PHOTO) {
-    doc.addImage(COUPLE_PHOTO, "JPEG", W/2-27, 10, 54, 52);
-  }
-}
-  catch(err){
-  console.error("ERREUR GENERATION PDF:", err);
-  alert("Erreur PDF: " + err.message);
-  notify("Erreur génération billet","err");
-}
+    if(COUPLE_PHOTO){
+      try{
+        doc.addImage(COUPLE_PHOTO,"JPEG", W/2-27, 10, 54, 52, undefined, "FAST");
         // Re-dessiner bordure ovale par-dessus
         doc.setFillColor(0,0,0,0);
         doc.setDrawColor(204,85,0);
@@ -400,11 +391,8 @@ try {
         // Anneau doré
         doc.setDrawColor(212,130,10);
         doc.setLineWidth(0.8);
-if (typeof doc.ellipse === "function") {
-  doc.ellipse(W/2, 36, 30, 28, "FD");
-} else {
-  doc.rect(W/2-30, 36-28, 60, 56, "FD"); // fallback carré
-}      }catch(e){}
+        doc.ellipse(W/2, 36, 31.5, 29.5, "S");
+      }catch(e){}
     }
 
     // ── NOMS DES MARIÉS ──
