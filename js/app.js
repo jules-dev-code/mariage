@@ -301,6 +301,217 @@ async function genPDF(id){
   const g=guests.find(x=>x.id===id); if(!g) return;
   notify("Génération du billet...","inf");
   try{
+    // Générer QR Code
+    const qrDiv=document.createElement("div");
+    qrDiv.style.cssText="position:absolute;left:-9999px;top:-9999px;width:150px;height:150px;background:white;padding:5px";
+    document.body.appendChild(qrDiv);
+    new QRCode(qrDiv,{
+      text:`https://mariage-beugueum-8494s-projects.vercel.app?inv=${g.id}`,
+      width:140,height:140,
+      colorDark:"#1A0E00",colorLight:"#FFFFFF",
+      correctLevel:QRCode.CorrectLevel.H
+    });
+    await new Promise(r=>setTimeout(r,500));
+    const qrCanvas=qrDiv.querySelector("canvas");
+    const qrImg=qrCanvas?qrCanvas.toDataURL("image/png"):null;
+    document.body.removeChild(qrDiv);
+ 
+    // Setup PDF — format A5 portrait
+    const {jsPDF}=window.jspdf;
+    const doc=new jsPDF({orientation:"portrait",unit:"mm",format:[148,210]});
+    const W=148, H=210;
+ 
+    // ── FOND PRINCIPAL ──
+    // Fond crème ivoire
+    doc.setFillColor(253,246,238);
+    doc.rect(0,0,W,H,"F");
+ 
+    // Bordure extérieure dorée
+    doc.setDrawColor(204,85,0);
+    doc.setLineWidth(3);
+    doc.rect(4,4,W-8,H-8,"S");
+ 
+    // Bordure intérieure fine
+    doc.setDrawColor(212,130,10);
+    doc.setLineWidth(0.5);
+    doc.rect(7,7,W-14,H-14,"S");
+ 
+    // ── FOND TEXTURÉ HAUT ──
+    doc.setFillColor(26,14,0);
+    doc.rect(0,0,W,62,"F");
+ 
+    // Overlay dégradé
+    doc.setFillColor(204,85,0);
+    doc.setGState(new doc.GState({opacity:0.15}));
+    doc.rect(0,0,W,62,"F");
+    doc.setGState(new doc.GState({opacity:1}));
+ 
+    // ── ORNEMENTS COINS HAUT ──
+    doc.setTextColor(204,85,0);
+    doc.setFontSize(18);
+    doc.text("✦",8,14);
+    doc.text("✦",W-8,14,{align:"right"});
+ 
+    // ── PHOTO MARIÉS EN OVALE ──
+    // Fond blanc ovale
+    doc.setFillColor(255,255,255);
+    doc.setDrawColor(204,85,0);
+    doc.setLineWidth(2);
+    // Simuler ovale avec ellipse
+    doc.ellipse(W/2, 36, 30, 28, "FD");
+ 
+    // Photo dans ovale
+    if(COUPLE_PHOTO){
+      try{
+        doc.addImage(COUPLE_PHOTO,"JPEG", W/2-27, 10, 54, 52, undefined, "FAST");
+        // Re-dessiner bordure ovale par-dessus
+        doc.setFillColor(0,0,0,0);
+        doc.setDrawColor(204,85,0);
+        doc.setLineWidth(2.5);
+        doc.ellipse(W/2, 36, 30, 28, "S");
+        // Anneau doré
+        doc.setDrawColor(212,130,10);
+        doc.setLineWidth(0.8);
+        doc.ellipse(W/2, 36, 31.5, 29.5, "S");
+      }catch(e){}
+    }
+ 
+    // ── NOMS DES MARIÉS ──
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(22);
+    doc.setFont("helvetica","bolditalic");
+    doc.text("Vanina & Yvan",W/2,72,{align:"center"});
+ 
+    // Ligne décorative sous les noms
+    doc.setDrawColor(204,85,0);
+    doc.setLineWidth(0.8);
+    doc.line(W/2-35,76,W/2+35,76);
+    doc.setDrawColor(212,130,10);
+    doc.setLineWidth(0.3);
+    doc.line(W/2-38,77.5,W/2+38,77.5);
+ 
+    // ── TEXTE INVITATION ──
+    doc.setTextColor(26,14,0);
+    doc.setFontSize(7.5);
+    doc.setFont("helvetica","italic");
+    const invText = "Deux histoires, un seul chemin...";
+    doc.text(invText,W/2,85,{align:"center"});
+ 
+    doc.setFontSize(6.5);
+    doc.setFont("helvetica","normal");
+    doc.setTextColor(90,55,20);
+    const lines = doc.splitTextToSize(
+      "C'est avec un immense bonheur que nous vous invitons à être témoins de notre promesse de mariage",
+      W-30
+    );
+    doc.text(lines,W/2,92,{align:"center"});
+ 
+    // ── SÉPARATEUR ──
+    doc.setTextColor(204,85,0);
+    doc.setFontSize(10);
+    doc.text("◆  ◆  ◆",W/2,103,{align:"center"});
+ 
+    // ── DATE & HEURE ──
+    // Boîte date
+    doc.setFillColor(26,14,0);
+    doc.roundRect(W/2-25,107,50,22,3,"F");
+    doc.setDrawColor(204,85,0);
+    doc.setLineWidth(0.8);
+    doc.roundRect(W/2-25,107,50,22,3,"S");
+ 
+    doc.setTextColor(204,85,0);
+    doc.setFontSize(7);
+    doc.setFont("helvetica","normal");
+    doc.text("SAMEDI",W/2,114,{align:"center"});
+    doc.setFontSize(16);
+    doc.setFont("helvetica","bold");
+    doc.setTextColor(232,114,42);
+    doc.text("27",W/2,123,{align:"center"});
+ 
+    doc.setFontSize(7);
+    doc.setFont("helvetica","normal");
+    doc.setTextColor(184,115,51);
+    doc.text("JUIN 2026",W/2-35,117,{align:"left"});
+    doc.text("17H00",W/2+35,117,{align:"right"});
+ 
+    // ── LIEU ──
+    doc.setTextColor(26,14,0);
+    doc.setFontSize(7);
+    doc.setFont("helvetica","bold");
+    doc.text("LIEU DE LA CÉRÉMONIE",W/2,135,{align:"center"});
+ 
+    doc.setFontSize(8);
+    doc.setFont("helvetica","normal");
+    doc.setTextColor(90,55,20);
+    doc.text("Nyom Messassi, 600 Lots · Yaoundé",W/2,142,{align:"center"});
+    doc.text("Cameroun",W/2,148,{align:"center"});
+ 
+    // ── SÉPARATEUR ──
+    doc.setDrawColor(204,85,0);
+    doc.setLineWidth(0.4);
+    doc.setLineDashPattern([2,3],0);
+    doc.line(15,153,W-15,153);
+    doc.setLineDashPattern([],0);
+ 
+    // ── SECTION INVITÉ ──
+    doc.setTextColor(204,85,0);
+    doc.setFontSize(6.5);
+    doc.setFont("helvetica","normal");
+    doc.text("INVITÉ(E) D'HONNEUR",W/2,160,{align:"center"});
+ 
+    doc.setTextColor(26,14,0);
+    doc.setFontSize(13);
+    doc.setFont("helvetica","bold");
+    doc.text(`${g.ti} ${g.fn} ${g.ln}`,W/2,168,{align:"center"});
+ 
+    // Table & Zone
+    doc.setFillColor(204,85,0);
+    doc.roundRect(W/2-30,171,60,12,2,"F");
+    doc.setTextColor(255,255,255);
+    doc.setFontSize(7);
+    doc.setFont("helvetica","bold");
+    doc.text(`TABLE N° ${g.tb}  ·  ${zlbl(g.zn).replace("✦ ","")}`,W/2,179,{align:"center"});
+ 
+    // Diet si présent
+    if(g.dt){
+      doc.setTextColor(140,95,55);
+      doc.setFontSize(6);
+      doc.setFont("helvetica","italic");
+      doc.text(`Menu : ${g.dt.replace(/[\u{1F000}-\u{FFFF}]/gu,"").trim()}`,W/2,186,{align:"center"});
+    }
+ 
+    // ── QR CODE ──
+    if(qrImg){
+      // Fond blanc QR
+      doc.setFillColor(255,255,255);
+      doc.setDrawColor(204,85,0);
+      doc.setLineWidth(0.8);
+      doc.roundRect(W/2-12,188,24,16,1,"FD");
+      doc.addImage(qrImg,"PNG",W/2-11,189,22,14);
+    }
+ 
+    // ID invité
+    doc.setTextColor(200,160,120);
+    doc.setFontSize(5);
+    doc.setFont("helvetica","normal");
+    doc.text(g.id,W/2,205,{align:"center"});
+ 
+    // ── ORNEMENTS BAS ──
+    doc.setFillColor(26,14,0);
+    doc.rect(0,H-10,W,10,"F");
+    doc.setTextColor(204,85,0);
+    doc.setFontSize(6);
+    doc.text("✦  Billet nominatif non transférable  ✦",W/2,H-4,{align:"center"});
+ 
+    // Sauvegarder
+    doc.save(`invitation_${g.fn}_${g.ln}.pdf`);
+    notify(`🎫 Invitation de ${fn(g)} générée !`);
+ 
+  }catch(err){
+    console.error(err);
+    notify("Erreur génération billet","err");
+  }
+}
     // QR Code
     const qrDiv=document.createElement("div");
     qrDiv.style.cssText="position:absolute;left:-9999px;top:-9999px;width:150px;height:150px;background:white;padding:5px";
