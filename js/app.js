@@ -204,7 +204,7 @@ async function addGuest(){
   const f=$("nFn").value.trim(),l=$("nLn").value.trim(),t=parseInt($("nTb").value);
   if(!f||!l||!t){notify("Remplissez prénom, nom et table","err");return;}
   const newId=`INV-${String(nextNum++).padStart(3,"0")}`;
-  const newG={id:newId,ti:$("nTi").value,fn:f,ln:l,tb:t,zn:$("nZn").value,dt:$("nDt").value,nt:$("nNt").value.trim(),ar:false,at:null};
+  const newG={id:newId,ti:$("nTi").value,fn:f,ln:l,tb:t,zn:$("nZn").value,dt:$("nDt").value,nt:$("nNt").value.trim(),phone:$("nPhone").value.trim(),ar:false,at:null};
   try{
     await DB.insert(newG); guests.push(newG);
     notify(`✓ ${$("nTi").value} ${f} ${l} ajouté(e) — Table ${t}`);
@@ -221,11 +221,34 @@ function openEdit(id){
   $("ePhone").value=g.phone||"";
 }
 async function saveEdit(){
-  const id=$("eId").value, g=guests.find(x=>x.id===id); if(!g) return;
-  const upd={fn:$("eFn").value.trim(),ln:$("eLn").value.trim(),tb:parseInt($("eTb").value),ti:$("eTi").value,zn:$("eZn").value,dt:$("eDt").value,nt:$("eNt").value.trim()};
-  try{await DB.update(id,upd);Object.assign(g,upd);closeMod("editMod");notify(`✓ ${fn(g)} mis(e) à jour`);updateStats();renderList();renderAlpha();}
-  catch(err){notify("Erreur modification","err");console.error(err);}
-  phone:$("ePhone").value.trim()
+  const id=$("eId").value;
+  const g=guests.find(x=>x.id===id);
+  if(!g) return;
+
+  const upd={
+    fn:$("eFn").value.trim(),
+    ln:$("eLn").value.trim(),
+    tb:parseInt($("eTb").value),
+    ti:$("eTi").value,
+    zn:$("eZn").value,
+    dt:$("eDt").value,
+    nt:$("eNt").value.trim(),
+    phone:$("ePhone").value.trim()
+  };
+
+  try{
+    await DB.update(id,upd);
+    Object.assign(g,upd);
+    closeMod("editMod");
+    notify(`✓ ${fn(g)} mis(e) à jour`);
+    updateStats();
+    renderList();
+    renderAlpha();
+  }
+  catch(err){
+    notify("Erreur modification","err");
+    console.error(err);
+  }
 }
 
 async function delGuest(id){
