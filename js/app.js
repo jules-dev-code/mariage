@@ -494,8 +494,7 @@ function groupWA(){
       doc.setTextColor(140,95,55);
       doc.setFontSize(6);
       doc.setFont("helvetica","italic");
-      doc.text(`Menu : ${g.dt.replace(/[\u{1F000}-\u{FFFF}]/gu,"").trim()}`,W/2,186,{align:"center"});
-    }
+doc.text(`Menu : ${(g.dt || "").replace(/[^\p{L}\p{N}\s]/gu,"").trim()}`,W/2,186,{align:"center"});    }
  
     // ── QR CODE ──
     if(qrImg){
