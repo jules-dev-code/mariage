@@ -295,9 +295,11 @@ function groupWA(){
   window.open(`https://wa.me/?text=${encodeURIComponent(msg)}`,"_blank");
   notify("💬 Message groupé ouvert","wa");
 }
-
+// ══════════════════════════════════════
+// PHOTO DES MARIÉS (base64)
+// ══════════════════════════════════════
 // BILLET PDF LUXUEUX — avec photo des mariés
-async function genPDF(id){
+  async function genPDF(id){
   const g=guests.find(x=>x.id===id); if(!g) return;
   notify("Génération du billet...","inf");
   try{
@@ -375,13 +377,13 @@ async function genPDF(id){
         doc.ellipse(W/2, 36, 31.5, 29.5, "S");
       }catch(e){}
     }
- 
+
     // ── NOMS DES MARIÉS ──
     doc.setTextColor(255,255,255);
     doc.setFontSize(22);
     doc.setFont("helvetica","bolditalic");
     doc.text("Vanina & Yvan",W/2,72,{align:"center"});
- 
+
     // Ligne décorative sous les noms
     doc.setDrawColor(204,85,0);
     doc.setLineWidth(0.8);
