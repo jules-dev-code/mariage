@@ -359,7 +359,11 @@ function groupWA(){
  
     // Overlay dégradé
     doc.setFillColor(204,85,0);
-    doc.setGState(new doc.GState({opacity:0.15}));
+try {
+  if (doc.GState) {
+    doc.setGState(new doc.GState({ opacity: 0.15 }));
+  }
+} catch(e) {}
     doc.rect(0,0,W,62,"F");
     doc.setGState(new doc.GState({opacity:1}));
  
@@ -378,9 +382,16 @@ function groupWA(){
     doc.ellipse(W/2, 36, 30, 28, "FD");
  
     // Photo dans ovale
-    if(COUPLE_PHOTO){
-      try{
-        doc.addImage(COUPLE_PHOTO,"JPEG", W/2-27, 10, 54, 52, undefined, "FAST");
+try {
+  if (COUPLE_PHOTO) {
+    doc.addImage(COUPLE_PHOTO, "JPEG", W/2-27, 10, 54, 52);
+  }
+}
+  catch(err){
+  console.error("ERREUR GENERATION PDF:", err);
+  alert("Erreur PDF: " + err.message);
+  notify("Erreur génération billet","err");
+}
         // Re-dessiner bordure ovale par-dessus
         doc.setFillColor(0,0,0,0);
         doc.setDrawColor(204,85,0);
@@ -389,8 +400,11 @@ function groupWA(){
         // Anneau doré
         doc.setDrawColor(212,130,10);
         doc.setLineWidth(0.8);
-        doc.ellipse(W/2, 36, 31.5, 29.5, "S");
-      }catch(e){}
+if (typeof doc.ellipse === "function") {
+  doc.ellipse(W/2, 36, 30, 28, "FD");
+} else {
+  doc.rect(W/2-30, 36-28, 60, 56, "FD"); // fallback carré
+}      }catch(e){}
     }
 
     // ── NOMS DES MARIÉS ──
