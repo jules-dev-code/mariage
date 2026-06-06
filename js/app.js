@@ -248,19 +248,34 @@ function openEdit(id){
 }
 
 async function saveEdit(){
-  const id=$("eId").value, g=guests.find(x=>x.id===id); if(!g) return;
+  const id=$("eId").value;
+  const g=guests.find(x=>x.id===id);
+  if(!g) return;
+
   const upd={
-    fn:$("eFn").value.trim(), ln:$("eLn").value.trim(),
-    tb:parseInt($("eTb").value), ti:$("eTi").value,
-    zn:$("eZn").value, dt:$("eDt").value,
+    fn:$("eFn").value.trim(),
+    ln:$("eLn").value.trim(),
+    tb:parseInt($("eTb").value),
+    ti:$("eTi").value,
+    zn:$("eZn").value,
+    dt:$("eDt").value,
     nt:$("eNt").value.trim(),
     phone:$("ePhone").value.trim()
   };
+
   try{
-    await DB.update(id,upd); Object.assign(g,upd);
-    closeMod("editMod"); notify(`✓ ${fn(g)} mis(e) à jour`);
-    updateStats(); renderList(); renderAlpha();
-  }catch(err){notify("Erreur modification","err");console.error(err);}
+    await DB.update(id,upd);
+    Object.assign(g,upd);
+    closeMod("editMod");
+    notify(`✓ ${fn(g)} mis(e) à jour`);
+    updateStats();
+    renderList();
+    renderAlpha();
+  }
+  catch(err){
+    notify("Erreur modification","err");
+    console.error(err);
+  }
 }
 
 // DELETE
