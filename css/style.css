@@ -355,3 +355,217 @@ footer{background:var(--ink);padding:70px 50px;text-align:center;border-top:1px 
 
   margin:40px auto 0;
 }
+.vip-page{
+   width:800px;
+   height:1130px;
+}
+
+.vip-page{
+  width:800px;
+  height:1130px;
+  position:relative;
+  overflow:hidden;
+  box-sizing:border-box;
+  font-family:'Montserrat',sans-serif;
+}
+
+.page1{
+  background:
+  linear-gradient(
+    135deg,
+    #050505,
+    #151515
+  );
+
+  border:8px solid #d4af37;
+}
+
+.page2{
+  background:
+  linear-gradient(
+    135deg,
+    #050505,
+    #151515
+  );
+
+  border:8px solid #d4af37;
+
+  padding:60px;
+}
+
+.gold-frame{
+  position:absolute;
+  inset:15px;
+
+  border:1px solid rgba(212,175,55,.5);
+
+  pointer-events:none;
+}
+
+.hero{
+  height:500px;
+  position:relative;
+  overflow:hidden;
+}
+
+.hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+
+  filter:
+    brightness(.75)
+    contrast(1.1);
+}
+
+.vy-bg{
+  position:absolute;
+
+  top:40px;
+  left:0;
+  right:0;
+
+  text-align:center;
+
+  font-size:180px;
+
+  font-family:'Cinzel';
+
+  font-weight:800;
+
+  color:rgba(212,175,55,.15);
+
+  z-index:2;
+}
+
+.couple-name{
+  text-align:center;
+
+  color:white;
+
+  font-size:60px;
+
+  font-family:'Cinzel';
+
+  margin-top:20px;
+}
+
+.couple-name span{
+  color:#d4af37;
+}
+
+.subtitle{
+  text-align:center;
+
+  color:#d4af37;
+
+  letter-spacing:8px;
+
+  margin-top:10px;
+}
+
+.vip-id{
+  text-align:center;
+
+  margin-top:20px;
+
+  color:#d4af37;
+}
+
+.guest-title{
+  text-align:center;
+
+  color:#d4af37;
+
+  margin-top:30px;
+}
+
+.message{
+  width:80%;
+
+  margin:25px auto;
+
+  text-align:center;
+
+  color:#f5f5f5;
+
+  line-height:1.8;
+}
+
+.date-box{
+  text-align:center;
+
+  color:white;
+
+  margin-top:20px;
+}
+
+.date-box .day{
+  font-size:80px;
+
+  color:#d4af37;
+
+  font-family:'Cinzel';
+}
+
+.location{
+  text-align:center;
+
+  color:white;
+
+  margin-top:30px;
+}
+
+.location h3{
+  color:#d4af37;
+}
+
+.infos{
+  display:flex;
+
+  justify-content:space-around;
+
+  margin-top:35px;
+
+  color:white;
+}
+
+.infos div{
+  text-align:center;
+}
+
+.infos span{
+  display:block;
+
+  color:#d4af37;
+
+  margin-bottom:8px;
+}
+
+.qr-wrapper{
+  width:220px;
+  height:220px;
+
+  background:white;
+
+  padding:15px;
+
+  margin:40px auto;
+}
+
+.qr-wrapper img{
+  width:100%;
+  height:100%;
+}
+
+.quote{
+  text-align:center;
+
+  color:#d4af37;
+
+  font-style:italic;
+
+  margin-top:20px;
+
+  font-size:22px;
+}
