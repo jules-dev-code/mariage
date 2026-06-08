@@ -4,21 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vanina & Yvan — Mariage 2026</title>
-
-<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,700;1,400;1,500&family=Cinzel:wght@400;500;600&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
-
-<!-- Librairies externes -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
-
-<!-- Ton CSS -->
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- ═══ NAVIGATION ═══ -->
 <nav id="nav">
   <div class="nav-brand">Vanina &amp; Yvan</div>
   <ul class="nav-links">
@@ -30,7 +23,6 @@
   <button class="nav-admin-btn" onclick="openPwd()">⬡ Administration</button>
 </nav>
 
-<!-- ═══ HERO ═══ -->
 <section id="hero">
   <div class="hero-photo" id="heroBg"></div>
   <div class="hero-overlay" id="heroOverlay" style="display:none"></div>
@@ -58,7 +50,6 @@
   </div>
 </section>
 
-<!-- ═══ MOT DES MARIÉS ═══ -->
 <section id="mot">
   <div class="mot-content">
     <span class="lbl">◆ Un mot des mariés ◆</span>
@@ -68,7 +59,6 @@
   </div>
 </section>
 
-<!-- ═══ DRESS CODE ═══ -->
 <section id="dresscode" class="section section-center">
   <span class="lbl">◆ Code vestimentaire ◆</span>
   <h2 class="ttl">Palette de la soirée</h2>
@@ -83,28 +73,26 @@
   </div>
 </section>
 
-<!-- ═══ PROGRAMME ═══ -->
 <section id="programme" class="section section-center">
   <span class="lbl">◆ Déroulé de la soirée ◆</span>
   <h2 class="ttl ttl-w">Programme</h2>
   <div class="gbar"></div>
   <div class="timeline">
-    <div class="tl-item"><div class="tl-time"><span>16:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Accueil &amp; check-in</h3><p>Réception des invités à l'entrée du château</p></div></div>
-    <div class="tl-item"><div class="tl-time"><span>17:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Cérémonie</h3><p>Échange des vœux dans la salle de cérémonie</p></div></div>
-    <div class="tl-item"><div class="tl-time"><span>18:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Vin d'honneur</h3><p>Cocktail &amp; canapés dans les jardins illuminés</p></div></div>
-    <div class="tl-item"><div class="tl-time"><span>20:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Dîner de gala</h3><p>Menu gastronomique 5 services en grande salle</p></div></div>
-    <div class="tl-item"><div class="tl-time"><span>22:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Pièce montée &amp; discours</h3><p>Coupure du gâteau &amp; toast des témoins</p></div></div>
-    <div class="tl-item"><div class="tl-time"><span>23:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Soirée dansante</h3><p>DJ set &amp; piste de danse jusqu'à l'aube</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>16:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Accueil &amp; check-in</h3><p>Réception des invités à l'entrée</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>17:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Cérémonie</h3><p>Échange des vœux</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>18:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Vin d'honneur</h3><p>Cocktail &amp; canapés dans les jardins</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>20:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Dîner de gala</h3><p>Menu gastronomique 5 services</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>22:30</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Pièce montée &amp; discours</h3><p>Coupure du gâteau &amp; toast</p></div></div>
+    <div class="tl-item"><div class="tl-time"><span>23:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Soirée dansante</h3><p>DJ set jusqu'à l'aube</p></div></div>
   </div>
 </section>
 
-<!-- ═══ INFOS ═══ -->
 <section id="infos" class="section section-center">
   <span class="lbl">◆ Informations pratiques ◆</span>
   <h2 class="ttl">Le soir du mariage</h2>
   <div class="gbar"></div>
   <div class="info-grid">
-    <div class="info-card"><span class="info-icon">📍</span><h3>Lieu</h3><p>Nyom Messassi <br>lieux dit 600 Lots<br>Yaoundé, Cameroun</p></div>
+    <div class="info-card"><span class="info-icon">📍</span><h3>Lieu</h3><p>Nyom Messassi<br>lieux dit 600 Lots<br>Yaoundé, Cameroun</p></div>
     <div class="info-card"><span class="info-icon">🕔</span><h3>Horaires</h3><p>Accueil dès 16h30<br>Cérémonie à 17h00<br>Fin prévue à 04h00</p></div>
     <div class="info-card"><span class="info-icon">👔</span><h3>Tenue</h3><p>Tenue de soirée<br>Smoking / Robe longue<br>Palette orange &amp; noir</p></div>
     <div class="info-card"><span class="info-icon">🅿️</span><h3>Accès</h3><p>Parking privé sur place<br>Hors de la barrière<br>Valet parking disponible</p></div>
@@ -113,14 +101,13 @@
   </div>
 </section>
 
-<!-- ═══ FOOTER ═══ -->
 <footer>
   <span class="footer-brand">Vanina &amp; Yvan</span>
   <div class="gbar"></div>
   <p class="footer-sub">27 Juin 2026 · Yaoundé, Cameroun · Avec tout notre amour</p>
 </footer>
 
-<!-- ═══ MOT DE PASSE ADMIN ═══ -->
+<!-- MOT DE PASSE -->
 <div id="pwdOverlay">
   <div class="pwd-box">
     <div class="ttl" style="color:white;font-size:1.8rem">Administration</div>
@@ -131,11 +118,11 @@
       <button class="btn btn-burn" style="flex:1" onclick="chkPwd()">Connexion →</button>
       <button class="btn btn-ghost" style="flex:1" onclick="closePwd()">Annuler</button>
     </div>
-    <p class="pwd-hint">MOT DE PASSE PAR DÉFAUT : mariage2025</p>
+    <p class="pwd-hint">MOT DE PASSE : mariage2025</p>
   </div>
 </div>
 
-<!-- ═══ PANEL ADMIN ═══ -->
+<!-- ADMIN -->
 <div id="admin">
   <div class="adm-header">
     <div class="adm-title">✦ Tableau de bord — Gestion des invités</div>
@@ -153,7 +140,6 @@
     <div class="prog-info"><span id="progL">0 en attente</span><span id="progR">0 / 0 présents</span></div>
   </div>
   <div class="adm-body">
-    <!-- GAUCHE -->
     <div class="adm-left">
       <div class="scanner-box">
         <div class="panel-title">📷 Scanner QR Code</div>
@@ -176,19 +162,12 @@
           <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="nTb" type="number" placeholder="1" min="1" max="30"></div>
         </div>
         <div class="fgrp"><label class="flbl">Zone</label><select class="fctl" id="nZn"><option value="vip">VIP</option><option value="famille">Famille</option><option value="amis" selected>Amis</option><option value="collegues">Collègues</option></select></div>
-        <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="nDt"><option value="">Standard</option><option value="🥗 Végétarien">Végétarien</option><option value="🌱 Végane">Végane</option><option value="🕌 Halal">Halal</option><option value="✡ Casher">Casher</option><option value="🚫 Sans gluten">Sans gluten</option></select></div>
+        <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="nDt"><option value="">Standard</option><option value="Végétarien">Végétarien</option><option value="Végane">Végane</option><option value="Halal">Halal</option><option value="Casher">Casher</option><option value="Sans gluten">Sans gluten</option></select></div>
         <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="nNt" type="text" placeholder="Témoin, vient de loin..."></div>
-        <div class="fgrp">
-        <label class="flbl">Téléphone WhatsApp</label>
-        <input class="fctl" id="nPhone" type="tel" placeholder="+237 6XX XX XX XX">
-        </div>
-        <div class="fgrp">
-        <label class="flbl">Téléphone WhatsApp</label>
-        <input class="fctl" id="ePhone" type="tel" placeholder="+237 6XX XX XX XX">
-        </div>
+        <div class="fgrp"><label class="flbl">📱 Téléphone WhatsApp</label><input class="fctl" id="nPhone" type="tel" placeholder="+237 6XX XX XX XX"></div>
         <button class="btn btn-burn" style="width:100%;padding:13px" onclick="addGuest()">Ajouter l'invité</button>
-        </div>
-        <div>
+      </div>
+      <div>
         <div class="panel-title">⚙️ Actions globales</div>
         <div style="display:flex;flex-direction:column;gap:8px">
           <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="exportCSV()">↓ Exporter la liste (CSV)</button>
@@ -201,7 +180,6 @@
         <div id="arrLog" style="max-height:200px;overflow-y:auto;font-size:.82rem;color:rgba(255,255,255,.4)"><p style="font-style:italic">Aucune arrivée enregistrée</p></div>
       </div>
     </div>
-    <!-- DROITE -->
     <div class="adm-right">
       <div class="list-controls">
         <input class="list-search" id="srch" type="text" placeholder="🔍  Rechercher par nom, prénom, table, zone..." oninput="renderList()">
@@ -218,7 +196,7 @@
   </div>
 </div>
 
-<!-- ═══ MODAL ÉDITION ═══ -->
+<!-- MODAL ÉDITION -->
 <div class="modal-ov" id="editMod">
   <div class="modal">
     <button class="modal-x" onclick="closeMod('editMod')">✕</button>
@@ -234,8 +212,9 @@
       <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="eTb" type="number" min="1" max="30"></div>
     </div>
     <div class="fgrp"><label class="flbl">Zone</label><select class="fctl" id="eZn"><option value="vip">VIP</option><option value="famille">Famille</option><option value="amis">Amis</option><option value="collegues">Collègues</option></select></div>
-    <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="eDt"><option value="">Standard</option><option value="🥗 Végétarien">Végétarien</option><option value="🌱 Végane">Végane</option><option value="🕌 Halal">Halal</option><option value="✡ Casher">Casher</option><option value="🚫 Sans gluten">Sans gluten</option></select></div>
+    <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="eDt"><option value="">Standard</option><option value="Végétarien">Végétarien</option><option value="Végane">Végane</option><option value="Halal">Halal</option><option value="Casher">Casher</option><option value="Sans gluten">Sans gluten</option></select></div>
     <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="eNt" type="text"></div>
+    <div class="fgrp"><label class="flbl">📱 Téléphone WhatsApp</label><input class="fctl" id="ePhone" type="tel" placeholder="+237 6XX XX XX XX"></div>
     <div class="flex-end">
       <button class="btn btn-ghost" onclick="closeMod('editMod')">Annuler</button>
       <button class="btn btn-burn" onclick="saveEdit()">Enregistrer</button>
@@ -243,7 +222,7 @@
   </div>
 </div>
 
-<!-- ═══ ZONE PHOTO ═══ -->
+<!-- ZONE PHOTO -->
 <div id="photoZone">
   <div class="photo-drop" id="photoDrop"
        onclick="document.getElementById('photoInput').click()"
@@ -256,41 +235,7 @@
   </div>
 </div>
 
-<!-- NOTIFICATION -->
 <div class="notif" id="notif"></div>
-
-<!-- ═══ TON JAVASCRIPT ═══ -->
 <script src="js/app.js"></script>
-<script>
-// Auto check-in via URL
-(function(){
-  const params = new URLSearchParams(window.location.search);
-  const invId = params.get('inv');
-  if(!invId) return;
-
-  // Attendre que les guests soient chargés
-  setTimeout(async function(){
-    const g = guests.find(x => x.id === invId);
-    if(!g){
-      alert('Invité introuvable : ' + invId);
-      return;
-    }
-
-    // Afficher la fiche
-    const msg = g.ar
-      ? `✓ ${g.ti} ${g.fn} ${g.ln} — Déjà enregistré(e)\nTable N° ${g.tb} · ${g.zn}`
-      : `Invité trouvé !\n\n${g.ti} ${g.fn} ${g.ln}\nTable N° ${g.tb} · ${g.zn}\n\nConfirmer l'arrivée ?`;
-
-    if(g.ar){
-      alert(msg);
-    } else {
-      if(confirm(msg)){
-        await toggleArrival(invId);
-        alert(`✓ Arrivée confirmée pour ${g.fn} ${g.ln} !`);
-      }
-    }
-  }, 2000);
-})();
-</script>
 </body>
 </html>
