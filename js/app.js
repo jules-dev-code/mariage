@@ -434,113 +434,433 @@ function roundRect(doc, x, y, w, h, r = 0, style = "S") {
   doc.rect(x, y, w, h, style);
 }
 
-async function genPDF(id){
+/**
+ * genPDF — Génère un billet VIP style luxe noir/or directement sur canvas
+ * Dépendances : jsPDF (jspdf.jsPDF), QRCode.js (QRCode)
+ *
+ * Variables globales attendues :
+ *   guests        — tableau d'invités
+ *   COUPLE_PHOTO  — URL/base64 de la photo du couple
+ *   SITE_URL      — URL de base pour le QR code
+ *   EVENT_DATE, EVENT_LOCATION, EVENT_ADDRESS — infos événement
+ *   zlbl(zn)      — fonction qui retourne le libellé de zone
+ *   notify(msg, type) — fonction de notification UI
+ */
 
-    const g = guests.find(x => x.id === id);
+async function genPDF(id) {
+  const g = guests.find(x => x.id === id);
+  if (!g) return;
+  notify("Génération du billet...", "inf");
 
-    if(!g) return;
+  try {
+    /* ── 1. QR CODE ────────────────────────────────────────────────── */
+    const qrContainer = document.createElement("div");
+    qrContainer.style.cssText = "position:absolute;left:-99999px;top:-99999px;";
+    document.body.appendChild(qrContainer);
+    new QRCode(qrContainer, { text: SITE_URL + "?inv=" + g.id, width: 300, height: 300 });
+    await new Promise(r => setTimeout(r, 500));
+    const qrDataURL = qrContainer.querySelector("canvas").toDataURL("image/png");
+    document.body.removeChild(qrContainer);
 
-    notify("Generation du billet...", "inf");
+    /* ── 2. PHOTO DU COUPLE ─────────────────────────────────────────── */
+    const coupleImg = await loadImage(COUPLE_PHOTO);
 
-    try{
+    /* ── 3. CANVAS PRINCIPAL — format A5 portrait @ 3x ────────────── */
+    // A5 = 148 × 210 mm → à 96dpi×3 ≈ 1680 × 2386 px
+    const W = 1680, H = 2386;
+    const canvas = document.createElement("canvas");
+    canvas.width  = W;
+    canvas.height = H;
+    const ctx = canvas.getContext("2d");
 
-        const qrDiv = document.createElement("div");
+    /* ── HELPERS ────────────────────────────────────────────────────── */
+    const gold   = "#C9A84C";
+    const goldL  = "#F0CC70";
+    const goldD  = "#7A5C1E";
+    const black  = "#0A0A0A";
+    const white  = "#FFFFFF";
+    const cream  = "#F5EDD3";
 
-        qrDiv.style.position="absolute";
-        qrDiv.style.left="-99999px";
-
-        document.body.appendChild(qrDiv);
-
-        new QRCode(qrDiv,{
-            text:SITE_URL+"?inv="+g.id,
-            width:300,
-            height:300
-        });
-
-        await new Promise(r=>setTimeout(r,500));
-
-        const qr =
-            qrDiv.querySelector("canvas")
-            .toDataURL("image/png");
-
-        document.body.removeChild(qrDiv);
-
-        document.getElementById("ticket-photo").src =
-            COUPLE_PHOTO;
-
-        document.getElementById("ticket-name").innerText =
-            (
-                g.ti + " " +
-                g.fn + " " +
-                g.ln
-            ).toUpperCase();
-
-        document.getElementById("ticket-id").innerText =
-            "VIP-" + g.id;
-
-        document.getElementById("ticket-table").innerText =
-            g.tb;
-
-        document.getElementById("ticket-zone").innerText =
-            zlbl(g.zn);
-
-        document.getElementById("ticket-menu").innerText =
-            g.dt || "STANDARD";
-
-        document.getElementById("ticket-qr").src =
-            qr;
-
-        const canvas =
-            await html2canvas(
-                document.querySelector(".vip-ticket"),
-                {
-                    scale:4,
-                    useCORS:true,
-                    backgroundColor:null
-                }
-            );
-
-        const img =
-            canvas.toDataURL(
-                "image/jpeg",
-                1
-            );
-
-        const pdf =
-            new jspdf.jsPDF({
-                orientation:"portrait",
-                unit:"mm",
-                format:[148,210]
-            });
-
-        pdf.addImage(
-            img,
-            "JPEG",
-            0,
-            0,
-            148,
-            210
-        );
-
-        pdf.save(
-            "Invitation_" +
-            g.fn +
-            "_" +
-            g.ln +
-            ".pdf"
-        );
-
-        notify("Invitation generee !");
-
-    }catch(err){
-
-        console.error(err);
-
-        notify(
-            "Erreur generation billet",
-            "err"
-        );
+    function fillRect(x, y, w, h, color) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, w, h);
     }
+
+    function roundRect(x, y, w, h, r, fill, stroke, sw = 2) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+      if (fill)   { ctx.fillStyle = fill;   ctx.fill(); }
+      if (stroke) { ctx.strokeStyle = stroke; ctx.lineWidth = sw; ctx.stroke(); }
+    }
+
+    function text(str, x, y, font, color, align = "left", maxW) {
+      ctx.font = font;
+      ctx.fillStyle = color;
+      ctx.textAlign = align;
+      if (maxW) ctx.fillText(str, x, y, maxW);
+      else      ctx.fillText(str, x, y);
+    }
+
+    function line(x1, y1, x2, y2, color, w = 2) {
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.strokeStyle = color;
+      ctx.lineWidth = w;
+      ctx.stroke();
+    }
+
+    async function loadImage(src) {
+      return new Promise((res, rej) => {
+        const i = new Image();
+        i.crossOrigin = "anonymous";
+        i.onload  = () => res(i);
+        i.onerror = () => rej(new Error("Image load failed: " + src));
+        i.src = src;
+      });
+    }
+
+    function decorativeLine(cx, y, totalW, color) {
+      const seg = totalW * 0.35;
+      line(cx - seg, y, cx - 30, y, color, 1.5);
+      // petit losange central
+      ctx.save();
+      ctx.translate(cx, y);
+      ctx.rotate(Math.PI / 4);
+      ctx.fillStyle = color;
+      ctx.fillRect(-8, -8, 16, 16);
+      ctx.restore();
+      line(cx + 30, y, cx + seg, y, color, 1.5);
+    }
+
+    function cornerOrnament(x, y, size, flipX, flipY) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(flipX ? -1 : 1, flipY ? -1 : 1);
+      ctx.strokeStyle = gold;
+      ctx.lineWidth = 3;
+      // Cadre en L
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.6);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(size * 0.6, 0);
+      ctx.stroke();
+      // Filigrane décoratif
+      ctx.beginPath();
+      ctx.arc(size * 0.18, size * 0.18, size * 0.12, 0, Math.PI * 2);
+      ctx.strokeStyle = goldL;
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    /* ── 4. FOND GLOBAL ─────────────────────────────────────────────── */
+    fillRect(0, 0, W, H, black);
+
+    // Bordure extérieure or
+    roundRect(18, 18, W - 36, H - 36, 24, null, gold, 5);
+    // Bordure intérieure fine
+    roundRect(36, 36, W - 72, H - 72, 16, null, goldD, 2);
+
+    /* ── 5. ORNEMENTS DE COIN ───────────────────────────────────────── */
+    cornerOrnament(42, 42, 80, false, false);
+    cornerOrnament(W - 42, 42, 80, true, false);
+    cornerOrnament(42, H - 42, 80, false, true);
+    cornerOrnament(W - 42, H - 42, 80, true, true);
+
+    /* ── 6. PARTIE GAUCHE — PHOTO (largeur ~58 %) ───────────────────── */
+    const leftW = Math.floor(W * 0.58);
+    const leftH = H;
+
+    // Photo du couple (pleine hauteur côté gauche, assombrie)
+    ctx.save();
+    roundRect(0, 0, leftW, leftH, 0, black, null);
+    ctx.clip();
+
+    // Photo centrée/couverte
+    const scale = Math.max(leftW / coupleImg.width, leftH * 0.65 / coupleImg.height);
+    const pw = coupleImg.width  * scale;
+    const ph = coupleImg.height * scale;
+    const px = (leftW - pw) / 2;
+    const py = 0;
+    ctx.drawImage(coupleImg, px, py, pw, ph);
+
+    // Dégradé sombre bas (pour le texte)
+    const gradB = ctx.createLinearGradient(0, leftH * 0.45, 0, leftH);
+    gradB.addColorStop(0,   "rgba(0,0,0,0)");
+    gradB.addColorStop(0.4, "rgba(0,0,0,0.7)");
+    gradB.addColorStop(1,   "rgba(0,0,0,0.97)");
+    ctx.fillStyle = gradB;
+    ctx.fillRect(0, 0, leftW, leftH);
+
+    // Halo chaud derrière le couple
+    const gradHalo = ctx.createRadialGradient(leftW * 0.55, leftH * 0.3, 0, leftW * 0.55, leftH * 0.3, leftW * 0.7);
+    gradHalo.addColorStop(0,   "rgba(180,90,0,0.45)");
+    gradHalo.addColorStop(0.5, "rgba(120,50,0,0.2)");
+    gradHalo.addColorStop(1,   "rgba(0,0,0,0)");
+    ctx.fillStyle = gradHalo;
+    ctx.fillRect(0, 0, leftW, leftH);
+
+    ctx.restore();
+
+    /* ── 7. MONOGRAMME VY ──────────────────────────────────────────── */
+    const monoY = leftH * 0.56;
+    const monoX = leftW / 2;
+    ctx.save();
+    ctx.shadowColor = gold;
+    ctx.shadowBlur  = 40;
+    text("VY", monoX, monoY, `bold ${Math.floor(W * 0.14)}px Georgia, serif`, gold, "center");
+    ctx.restore();
+
+    // Rameau décoratif sous le monogramme
+    decorativeLine(monoX, monoY + 18, leftW * 0.7, goldD);
+
+    /* ── 8. NOM DES MARIÉS ─────────────────────────────────────────── */
+    const nameY = monoY + 110;
+    text("VANINA & YVAN", monoX, nameY, `bold ${Math.floor(W * 0.048)}px Georgia, serif`, white, "center", leftW - 80);
+    // Sous-titre
+    text("DEUX HISTOIRES, UN SEUL CHEMIN...", monoX, nameY + 60,
+      `${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center", leftW - 80);
+
+    decorativeLine(monoX, nameY + 90, leftW * 0.55, goldD);
+
+    /* ── 9. TEXTE D'INVITATION ─────────────────────────────────────── */
+    const invY = nameY + 140;
+    ctx.font = `italic ${Math.floor(W * 0.022)}px Georgia, serif`;
+    ctx.fillStyle = cream;
+    ctx.textAlign = "center";
+    const invLine1 = "C'est avec un immense bonheur que nous vous";
+    const invLine2 = "invitons à être témoins de notre promesse de mariage.";
+    ctx.fillText(invLine1, monoX, invY, leftW - 100);
+    ctx.fillText(invLine2, monoX, invY + 48, leftW - 100);
+
+    decorativeLine(monoX, invY + 80, leftW * 0.45, goldD);
+
+    /* ── 10. DATE ───────────────────────────────────────────────────── */
+    const dateY = invY + 140;
+    const dateColX = leftW * 0.3;
+    const moisColX = leftW * 0.68;
+
+    text("SAMEDI", dateColX, dateY, `${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center");
+    text("27", dateColX, dateY + 90, `bold ${Math.floor(W * 0.065)}px Georgia, serif`, gold, "center");
+
+    // Séparateur vertical
+    line(leftW / 2, dateY - 10, leftW / 2, dateY + 100, goldD, 2);
+
+    text("DÉCEMBRE", moisColX, dateY, `${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center");
+    text("2026", moisColX, dateY + 90, `bold ${Math.floor(W * 0.065)}px Georgia, serif`, gold, "center");
+
+    decorativeLine(monoX, dateY + 120, leftW * 0.5, goldD);
+
+    /* ── 11. LIEU ───────────────────────────────────────────────────── */
+    const locY = dateY + 180;
+    // Icône pin (cercle + triangle)
+    ctx.save();
+    ctx.fillStyle = gold;
+    ctx.beginPath();
+    ctx.arc(80, locY - 18, 22, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = black;
+    ctx.beginPath();
+    ctx.arc(80, locY - 18, 10, 0, Math.PI * 2);
+    ctx.fill();
+    // Pointe du pin
+    ctx.fillStyle = gold;
+    ctx.beginPath();
+    ctx.moveTo(70, locY - 2);
+    ctx.lineTo(90, locY - 2);
+    ctx.lineTo(80, locY + 14);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    text("LIEU DE LA CÉRÉMONIE", 118, locY - 22,
+      `bold ${Math.floor(W * 0.022)}px Georgia, serif`, gold, "left");
+    text("Nyom Messassi, 600 Lots", 118, locY + 14,
+      `${Math.floor(W * 0.02)}px Georgia, serif`, cream, "left");
+    text("Yaoundé, Cameroun", 118, locY + 52,
+      `${Math.floor(W * 0.02)}px Georgia, serif`, cream, "left");
+
+    /* ── 12. CITATION BAS ───────────────────────────────────────────── */
+    const citY = locY + 120;
+    decorativeLine(monoX, citY, leftW * 0.5, goldD);
+    text("L'amour unit nos cœurs, la foi guide nos pas.", monoX, citY + 56,
+      `italic ${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center", leftW - 80);
+
+    // Petite couronne bas gauche
+    ctx.save();
+    ctx.fillStyle = gold;
+    ctx.font = `${Math.floor(W * 0.03)}px serif`;
+    ctx.textAlign = "center";
+    ctx.fillText("♛", monoX, citY + 110);
+    ctx.restore();
+
+    /* ── 13. SÉPARATEUR POINTILLÉ VERTICAL ────────────────────────── */
+    ctx.save();
+    ctx.setLineDash([14, 14]);
+    ctx.strokeStyle = goldD;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(leftW, 60);
+    ctx.lineTo(leftW, H - 60);
+    ctx.stroke();
+    ctx.setLineDash([]);
+    ctx.restore();
+
+    /* ── 14. PARTIE DROITE — INFOS VIP ─────────────────────────────── */
+    const rightX  = leftW + 30;
+    const rightW  = W - leftW - 30;
+    const rightCX = leftW + rightW / 2 + 20;
+
+    // Fond légèrement plus clair (texture subtile)
+    ctx.save();
+    ctx.fillStyle = "rgba(20,15,5,0.6)";
+    ctx.fillRect(leftW + 1, 0, W - leftW - 1, H);
+    ctx.restore();
+
+    // Couronne
+    ctx.save();
+    ctx.font = `${Math.floor(W * 0.055)}px serif`;
+    ctx.fillStyle = gold;
+    ctx.textAlign = "center";
+    ctx.shadowColor = gold;
+    ctx.shadowBlur = 20;
+    ctx.fillText("♛", rightCX, 140);
+    ctx.restore();
+
+    // VIP
+    text("VIP", rightCX, 240, `bold ${Math.floor(W * 0.1)}px Georgia, serif`, gold, "center");
+    text("INVITATION", rightCX, 298, `${Math.floor(W * 0.028)}px Georgia, serif`, cream, "center");
+
+    decorativeLine(rightCX, 328, rightW * 0.7, goldD);
+
+    // BILLET NOMINATIF
+    text("BILLET NOMINATIF", rightCX, 380, `bold ${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center");
+    text("NON TRANSFÉRABLE", rightCX, 418, `${Math.floor(W * 0.019)}px Georgia, serif`, white, "center");
+
+    decorativeLine(rightCX, 450, rightW * 0.65, goldD);
+
+    // INVITÉ D'HONNEUR
+    text("INVITÉ D'HONNEUR", rightCX, 510, `bold ${Math.floor(W * 0.023)}px Georgia, serif`, gold, "center");
+
+    // Nom de l'invité
+    const guestName = (g.ti ? g.ti + " " : "") + g.fn + " " + g.ln;
+    const nameFontSize = Math.floor(W * 0.038);
+    ctx.save();
+    ctx.font = `italic bold ${nameFontSize}px Georgia, serif`;
+    ctx.fillStyle = white;
+    ctx.textAlign = "center";
+    ctx.shadowColor = "rgba(200,168,76,0.5)";
+    ctx.shadowBlur = 12;
+    // Si le nom est long, on réduit
+    const nameMetrics = ctx.measureText(guestName);
+    const maxNameW = rightW - 60;
+    if (nameMetrics.width > maxNameW) {
+      ctx.font = `italic bold ${Math.floor(nameFontSize * 0.75)}px Georgia, serif`;
+    }
+    ctx.fillText(guestName, rightCX, 580, maxNameW);
+    ctx.fillText("", rightCX, 620, maxNameW); // ligne 2 si besoin
+    ctx.restore();
+
+    decorativeLine(rightCX, 640, rightW * 0.6, goldD);
+
+    /* ── BLOC TABLE ─────────────────────────────────────────────────── */
+    function infoBlock(label, value, yTop, valueColor = gold) {
+      text(label, rightCX, yTop, `${Math.floor(W * 0.02)}px Georgia, serif`, cream, "center");
+      text(value, rightCX, yTop + 68, `bold ${Math.floor(W * 0.06)}px Georgia, serif`, valueColor, "center", rightW - 60);
+      decorativeLine(rightCX, yTop + 100, rightW * 0.5, goldD);
+    }
+
+    // Encadré TABLE
+    const tableNum = String(g.tb || "01").padStart(2, "0");
+    const bx = leftW + 50, bw = W - leftW - 100, bh = 160;
+    roundRect(bx, 670, bw, bh, 12, "rgba(30,20,5,0.6)", gold, 2.5);
+    text("TABLE", rightCX, 730, `${Math.floor(W * 0.022)}px Georgia, serif`, cream, "center");
+    text(tableNum, rightCX, 810, `bold ${Math.floor(W * 0.075)}px Georgia, serif`, gold, "center");
+
+    decorativeLine(rightCX, 855, rightW * 0.55, goldD);
+
+    // ZONE
+    text("ZONE", rightCX, 910, `${Math.floor(W * 0.022)}px Georgia, serif`, cream, "center");
+    text(zlbl(g.zn).toUpperCase(), rightCX, 968, `bold ${Math.floor(W * 0.038)}px Georgia, serif`, gold, "center", rightW - 60);
+
+    decorativeLine(rightCX, 1000, rightW * 0.5, goldD);
+
+    // MENU
+    text("MENU", rightCX, 1055, `${Math.floor(W * 0.022)}px Georgia, serif`, cream, "center");
+    text((g.dt || "STANDARD").toUpperCase(), rightCX, 1113, `bold ${Math.floor(W * 0.038)}px Georgia, serif`, gold, "center", rightW - 60);
+
+    decorativeLine(rightCX, 1148, rightW * 0.5, goldD);
+
+    /* ── 15. QR CODE ────────────────────────────────────────────────── */
+    const qrImg = await loadImage(qrDataURL);
+    const qrSize = Math.floor(rightW * 0.65);
+    const qrX = rightCX - qrSize / 2;
+    const qrY = 1180;
+
+    // Cadre or autour du QR
+    roundRect(qrX - 22, qrY - 22, qrSize + 44, qrSize + 80, 16, "rgba(10,8,0,0.85)", gold, 3);
+
+    // Couronne au-dessus du QR
+    ctx.save();
+    ctx.font = `${Math.floor(W * 0.035)}px serif`;
+    ctx.fillStyle = gold;
+    ctx.textAlign = "center";
+    ctx.fillText("♛", rightCX, qrY - 28);
+    ctx.restore();
+
+    ctx.drawImage(qrImg, qrX, qrY, qrSize, qrSize);
+
+    decorativeLine(rightCX, qrY + qrSize + 50, rightW * 0.6, goldD);
+
+    /* ── 16. BARCODE FICTIF BAS ─────────────────────────────────────── */
+    const bcY = H - 130;
+    const bcX = leftW + 50;
+    const bcW = W - leftW - 100;
+    const barW = 4;
+    const heights = [1,.6,1,.4,1,.7,1,.5,1,.8,1,.3,1,.9,1,.5,1,.7,1,.4,1,1,.6,1,.5,.8];
+    let bxOff = bcX;
+    for (let i = 0; i < heights.length; i++) {
+      ctx.fillStyle = i % 2 === 0 ? gold : "transparent";
+      if (i % 2 === 0) {
+        const bh2 = Math.floor(60 * heights[i]);
+        ctx.fillRect(bxOff, bcY + (60 - bh2), barW, bh2);
+      }
+      bxOff += barW + 2;
+    }
+
+    /* ── 17. ID en bas ───────────────────────────────────────────────── */
+    const guestId = "VIP-" + g.id;
+    text(guestId, rightCX, H - 55,
+      `${Math.floor(W * 0.016)}px monospace`, goldD, "center");
+
+    /* ── 18. EXPORT PDF ─────────────────────────────────────────────── */
+    const imgData = canvas.toDataURL("image/jpeg", 0.97);
+
+    const pdf = new jspdf.jsPDF({
+      orientation: "portrait",
+      unit: "mm",
+      format: [148, 210]
+    });
+
+    pdf.addImage(imgData, "JPEG", 0, 0, 148, 210);
+    pdf.save(`Invitation_${g.fn}_${g.ln}.pdf`);
+
+    notify("Invitation générée !");
+
+  } catch (err) {
+    console.error(err);
+    notify("Erreur génération billet", "err");
+  }
 }
 // ── QR SCANNER ──
 function toggleScan() { scanOn ? stopScan() : startScan(); }
