@@ -434,183 +434,114 @@ function roundRect(doc, x, y, w, h, r = 0, style = "S") {
   doc.rect(x, y, w, h, style);
 }
 
-async function genPDF(id) {
-  var g = guests.find(function (x) { return x.id === id; });
-  if (!g) return;
+async function genPDF(id){
 
-  notify("Generation du billet...", "inf");
+    const g = guests.find(x => x.id === id);
 
-  try {
-    // QR Code
-    var qrDiv = document.createElement("div");
-    qrDiv.style.cssText =
-      "position:absolute;left:-9999px;top:-9999px;width:150px;height:150px;background:white;padding:5px";
+    if(!g) return;
 
-    document.body.appendChild(qrDiv);
+    notify("Generation du billet...", "inf");
 
-    new QRCode(qrDiv, {
-      text: SITE_URL + "?inv=" + g.id,
-      width: 140,
-      height: 140,
-      colorDark: "#1A0E00",
-      colorLight: "#FFFFFF",
-      correctLevel: QRCode.CorrectLevel.H
-    });
+    try{
 
-    await new Promise(function (r) { setTimeout(r, 500); });
+        const qrDiv = document.createElement("div");
 
-    var qrCanvas = qrDiv.querySelector("canvas");
-    var qrImg = qrCanvas ? qrCanvas.toDataURL("image/png") : null;
+        qrDiv.style.position="absolute";
+        qrDiv.style.left="-99999px";
 
-    document.body.removeChild(qrDiv);
+        document.body.appendChild(qrDiv);
 
-    // PDF
-    var jsPDF = window.jspdf.jsPDF;
-    var doc = new jsPDF({ orientation: "portrait", unit: "mm", format: [148, 210] });
+        new QRCode(qrDiv,{
+            text:SITE_URL+"?inv="+g.id,
+            width:300,
+            height:300
+        });
 
-    var W = 148, H = 210;
+        await new Promise(r=>setTimeout(r,500));
 
-    // Fond crème
-    doc.setFillColor(253, 246, 238);
-    doc.rect(0, 0, W, H, "F");
+        const qr =
+            qrDiv.querySelector("canvas")
+            .toDataURL("image/png");
 
-    // Bordures
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(3);
-    doc.rect(3, 3, W - 6, H - 6, "S");
+        document.body.removeChild(qrDiv);
 
-    doc.setDrawColor(212, 130, 10);
-    doc.setLineWidth(0.5);
-    doc.rect(6, 6, W - 12, H - 12, "S");
+        document.getElementById("ticket-photo").src =
+            COUPLE_PHOTO;
 
-    // Haut sombre
-    doc.setFillColor(26, 14, 0);
-    doc.rect(0, 0, W, 68, "F");
+        document.getElementById("ticket-name").innerText =
+            (
+                g.ti + " " +
+                g.fn + " " +
+                g.ln
+            ).toUpperCase();
 
-    // Décor
-    doc.setTextColor(204, 85, 0);
-    doc.setFontSize(14);
-    doc.text("*", 7, 13);
-    doc.text("*", W - 7, 13, { align: "right" });
+        document.getElementById("ticket-id").innerText =
+            "VIP-" + g.id;
 
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(0.5);
-    doc.line(18, 8, W - 18, 8);
+        document.getElementById("ticket-table").innerText =
+            g.tb;
 
-    // Photo
-    doc.setFillColor(253, 246, 238);
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(2.5);
-    doc.ellipse(W / 2, 36, 32, 30, "FD");
+        document.getElementById("ticket-zone").innerText =
+            zlbl(g.zn);
 
-    try {
-      doc.addImage(COUPLE_PHOTO, "JPEG", W / 2 - 30, 7, 60, 58);
-    } catch (e) {}
+        document.getElementById("ticket-menu").innerText =
+            g.dt || "STANDARD";
 
-    // Noms
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(20);
-    doc.setFont("helvetica", "bolditalic");
-    doc.text("Vanina & Yvan", W / 2, 74, { align: "center" });
+        document.getElementById("ticket-qr").src =
+            qr;
 
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(0.8);
-    doc.line(W / 2 - 38, 78, W / 2 + 38, 78);
+        const canvas =
+            await html2canvas(
+                document.querySelector(".vip-ticket"),
+                {
+                    scale:4,
+                    useCORS:true,
+                    backgroundColor:null
+                }
+            );
 
-    // Citation
-    doc.setTextColor(26, 14, 0);
-    doc.setFontSize(8);
-    doc.text("Deux histoires, un seul chemin...", W / 2, 87, { align: "center" });
+        const img =
+            canvas.toDataURL(
+                "image/jpeg",
+                1
+            );
 
-    // Texte
-    doc.setFontSize(6.8);
-    var lines = doc.splitTextToSize(
-      "C'est avec un immense bonheur que nous vous invitons a etre temoins de notre promesse de mariage",
-      W - 28
-    );
-    doc.text(lines, W / 2, 94, { align: "center" });
+        const pdf =
+            new jspdf.jsPDF({
+                orientation:"portrait",
+                unit:"mm",
+                format:[148,210]
+            });
 
-    // Séparateur
-    doc.setTextColor(204, 85, 0);
-    doc.setFontSize(9);
-    doc.text("* * *", W / 2, 106, { align: "center" });
+        pdf.addImage(
+            img,
+            "JPEG",
+            0,
+            0,
+            148,
+            210
+        );
 
-    // Bloc date (FIX roundRect)
-    doc.setFillColor(26, 14, 0);
-    roundRect(doc, W / 2 - 28, 110, 56, 24, 3, "F");
+        pdf.save(
+            "Invitation_" +
+            g.fn +
+            "_" +
+            g.ln +
+            ".pdf"
+        );
 
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(0.8);
-    roundRect(doc, W / 2 - 28, 110, 56, 24, 3, "S");
+        notify("Invitation generee !");
 
-    doc.setTextColor(232, 114, 42);
-    doc.setFontSize(18);
-    doc.setFont("helvetica", "bold");
-    doc.text("27", W / 2, 127, { align: "center" });
+    }catch(err){
 
-    // Lieu
-    doc.setTextColor(26, 14, 0);
-    doc.setFontSize(6.5);
-    doc.text("LIEU DE LA CEREMONIE", W / 2, 140, { align: "center" });
+        console.error(err);
 
-    doc.setFontSize(7.5);
-    doc.text("Nyom Messassi, 600 Lots", W / 2, 147, { align: "center" });
-    doc.text("Yaounde, Cameroun", W / 2, 153, { align: "center" });
-
-    // Ligne
-    doc.setDrawColor(204, 85, 0);
-    doc.setLineWidth(0.4);
-    doc.setLineDashPattern([2, 3], 0);
-    doc.line(12, 158, W - 12, 158);
-    doc.setLineDashPattern([], 0);
-
-    // Invité
-    doc.setFontSize(12);
-    doc.setFont("helvetica", "bold");
-    doc.text(g.ti + " " + g.fn + " " + g.ln, W / 2, 173, { align: "center" });
-
-    // Badge
-    doc.setFillColor(204, 85, 0);
-    roundRect(doc, W / 2 - 32, 176, 64, 12, 2, "F");
-
-    doc.setTextColor(255, 255, 255);
-    doc.setFontSize(7);
-    doc.text("TABLE N° " + g.tb + " · " + zlbl(g.zn), W / 2, 184, { align: "center" });
-
-    // Menu
-    if (g.dt) {
-      doc.setTextColor(130, 85, 40);
-      doc.setFontSize(6);
-      doc.text("Menu : " + g.dt, W / 2, 191, { align: "center" });
+        notify(
+            "Erreur generation billet",
+            "err"
+        );
     }
-
-    // QR
-    if (qrImg) {
-      doc.setFillColor(255, 255, 255);
-      doc.setDrawColor(204, 85, 0);
-
-      roundRect(doc, W / 2 - 13, 193, 26, 15, 1, "FD");
-
-      doc.addImage(qrImg, "PNG", W / 2 - 12, 194, 24, 13);
-    }
-
-    // Bas
-    doc.setFillColor(26, 14, 0);
-    doc.rect(0, H - 9, W, 9, "F");
-
-    doc.setTextColor(204, 85, 0);
-    doc.setFontSize(5.5);
-    doc.text("* Billet nominatif non transferable *", W / 2, H - 3.5, { align: "center" });
-
-    doc.save("invitation_" + g.fn + "_" + g.ln + ".pdf");
-
-    notify("Invitation generee !");
-  } catch (err) {
-    console.error(err);
-    notify("Erreur generation billet", "err");
-  }
 }
-
 // ── QR SCANNER ──
 function toggleScan() { scanOn ? stopScan() : startScan(); }
 
