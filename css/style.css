@@ -202,3 +202,156 @@ footer{background:var(--ink);padding:70px 50px;text-align:center;border-top:1px 
 .mt10{margin-top:10px}
 @media(max-width:900px){.adm-body{grid-template-columns:1fr}.adm-left{position:static;max-height:none}}
 @media(max-width:768px){#nav{padding:0 20px}.nav-links{display:none}.section{padding:80px 20px}.adm-header{padding:12px 15px;height:auto}.adm-left,.adm-right{padding:20px}.modal{padding:30px 20px}.countdown{gap:12px}.form-row{grid-template-columns:1fr}}
+.vip-ticket{
+  width:800px;
+  height:1130px;
+
+  background:#0b0b0b;
+
+  overflow:hidden;
+
+  position:relative;
+
+  border:8px solid #d4af37;
+
+  box-sizing:border-box;
+}
+
+.hero{
+  height:460px;
+  position:relative;
+}
+
+.hero img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.overlay{
+  position:absolute;
+  inset:0;
+
+  background:
+  linear-gradient(
+    rgba(0,0,0,.15),
+    rgba(0,0,0,.80)
+  );
+}
+
+.monogram{
+  position:absolute;
+
+  top:120px;
+  left:0;
+  right:0;
+
+  text-align:center;
+
+  font-size:120px;
+
+  color:rgba(212,175,55,.25);
+
+  font-family:'Cinzel';
+  font-weight:800;
+}
+
+.couple{
+  position:absolute;
+
+  bottom:95px;
+
+  width:100%;
+
+  text-align:center;
+
+  color:white;
+
+  font-family:'Cinzel';
+
+  font-size:42px;
+
+  letter-spacing:3px;
+}
+
+.subtitle{
+  position:absolute;
+
+  bottom:60px;
+
+  width:100%;
+
+  text-align:center;
+
+  color:#d4af37;
+
+  font-family:'Montserrat';
+
+  letter-spacing:6px;
+
+  font-size:12px;
+}
+
+.content{
+  padding:45px;
+}
+
+.vip-number{
+  text-align:center;
+
+  color:#b87333;
+
+  font-size:14px;
+
+  letter-spacing:4px;
+
+  margin-bottom:25px;
+}
+
+.guest-name{
+  text-align:center;
+
+  color:white;
+
+  font-size:34px;
+
+  font-family:'Cinzel';
+
+  margin-bottom:20px;
+}
+
+.divider{
+  width:180px;
+  height:2px;
+
+  background:#d4af37;
+
+  margin:0 auto 30px;
+}
+
+.info-row{
+  display:flex;
+
+  justify-content:space-between;
+
+  margin-bottom:18px;
+
+  color:#f3f3f3;
+
+  font-family:'Montserrat';
+}
+
+.info-row span:first-child{
+  color:#d4af37;
+}
+
+.qr-box{
+  width:180px;
+  height:180px;
+
+  background:white;
+
+  padding:12px;
+
+  margin:40px auto 0;
+}
