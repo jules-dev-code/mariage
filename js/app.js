@@ -428,202 +428,186 @@ function groupWA() {
 }
 
 // ── BILLET PDF LUXUEUX ──
+function roundRect(doc, x, y, w, h, r = 0, style = "S") {
+  // fallback compatible jsPDF (stable)
+  doc.setLineJoin(1);
+  doc.rect(x, y, w, h, style);
+}
+
 async function genPDF(id) {
-  var g = guests.find(function(x){ return x.id===id; });
+  var g = guests.find(function (x) { return x.id === id; });
   if (!g) return;
-  notify("Generation du billet...","inf");
+
+  notify("Generation du billet...", "inf");
+
   try {
     // QR Code
     var qrDiv = document.createElement("div");
-    qrDiv.style.cssText = "position:absolute;left:-9999px;top:-9999px;width:150px;height:150px;background:white;padding:5px";
+    qrDiv.style.cssText =
+      "position:absolute;left:-9999px;top:-9999px;width:150px;height:150px;background:white;padding:5px";
+
     document.body.appendChild(qrDiv);
+
     new QRCode(qrDiv, {
-      text: SITE_URL+"?inv="+g.id,
-      width:140, height:140,
-      colorDark:"#1A0E00", colorLight:"#FFFFFF",
+      text: SITE_URL + "?inv=" + g.id,
+      width: 140,
+      height: 140,
+      colorDark: "#1A0E00",
+      colorLight: "#FFFFFF",
       correctLevel: QRCode.CorrectLevel.H
     });
-    await new Promise(function(r){ setTimeout(r, 500); });
+
+    await new Promise(function (r) { setTimeout(r, 500); });
+
     var qrCanvas = qrDiv.querySelector("canvas");
     var qrImg = qrCanvas ? qrCanvas.toDataURL("image/png") : null;
+
     document.body.removeChild(qrDiv);
 
-    // PDF A5 portrait
+    // PDF
     var jsPDF = window.jspdf.jsPDF;
-    var doc = new jsPDF({orientation:"portrait", unit:"mm", format:[148,210]});
-    var W=148, H=210;
+    var doc = new jsPDF({ orientation: "portrait", unit: "mm", format: [148, 210] });
+
+    var W = 148, H = 210;
 
     // Fond crème
-    doc.setFillColor(253,246,238);
-    doc.rect(0,0,W,H,"F");
+    doc.setFillColor(253, 246, 238);
+    doc.rect(0, 0, W, H, "F");
 
-    // Bordure orange épaisse
-    doc.setDrawColor(204,85,0);
+    // Bordures
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(3);
-    doc.rect(3,3,W-6,H-6,"S");
+    doc.rect(3, 3, W - 6, H - 6, "S");
 
-    // Bordure dorée fine intérieure
-    doc.setDrawColor(212,130,10);
+    doc.setDrawColor(212, 130, 10);
     doc.setLineWidth(0.5);
-    doc.rect(6,6,W-12,H-12,"S");
+    doc.rect(6, 6, W - 12, H - 12, "S");
 
-    // Fond sombre haut
-    doc.setFillColor(26,14,0);
-    doc.rect(0,0,W,68,"F");
+    // Haut sombre
+    doc.setFillColor(26, 14, 0);
+    doc.rect(0, 0, W, 68, "F");
 
-    // Ornements coins
-    doc.setTextColor(204,85,0);
+    // Décor
+    doc.setTextColor(204, 85, 0);
     doc.setFontSize(14);
-    doc.text("*",7,13);
-    doc.text("*",W-7,13,{align:"right"});
-    doc.setDrawColor(204,85,0);
+    doc.text("*", 7, 13);
+    doc.text("*", W - 7, 13, { align: "right" });
+
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(0.5);
-    doc.line(18,8,W-18,8);
+    doc.line(18, 8, W - 18, 8);
 
-    // Photo ovale
-    doc.setFillColor(253,246,238);
-    doc.setDrawColor(204,85,0);
+    // Photo
+    doc.setFillColor(253, 246, 238);
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(2.5);
-    doc.ellipse(W/2,36,32,30,"FD");
+    doc.ellipse(W / 2, 36, 32, 30, "FD");
+
     try {
-      doc.addImage(COUPLE_PHOTO,"JPEG",W/2-30,7,60,58,undefined,"FAST");
-      doc.setFillColor(0,0,0,0);
-      doc.setDrawColor(204,85,0);
-      doc.setLineWidth(2.5);
-      doc.ellipse(W/2,36,32,30,"S");
-      doc.setDrawColor(212,130,10);
-      doc.setLineWidth(0.8);
-      doc.ellipse(W/2,36,33.5,31.5,"S");
-    } catch(e){}
+      doc.addImage(COUPLE_PHOTO, "JPEG", W / 2 - 30, 7, 60, 58);
+    } catch (e) {}
 
-    // Noms mariés
-    doc.setTextColor(255,255,255);
+    // Noms
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(20);
-    doc.setFont("helvetica","bolditalic");
-    doc.text("Vanina & Yvan",W/2,74,{align:"center"});
+    doc.setFont("helvetica", "bolditalic");
+    doc.text("Vanina & Yvan", W / 2, 74, { align: "center" });
 
-    // Ligne déco
-    doc.setDrawColor(204,85,0);
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(0.8);
-    doc.line(W/2-38,78,W/2+38,78);
-    doc.setDrawColor(212,130,10);
-    doc.setLineWidth(0.3);
-    doc.line(W/2-40,79.5,W/2+40,79.5);
+    doc.line(W / 2 - 38, 78, W / 2 + 38, 78);
 
     // Citation
-    doc.setTextColor(26,14,0);
+    doc.setTextColor(26, 14, 0);
     doc.setFontSize(8);
-    doc.setFont("helvetica","bolditalic");
-    doc.text("Deux histoires, un seul chemin...",W/2,87,{align:"center"});
+    doc.text("Deux histoires, un seul chemin...", W / 2, 87, { align: "center" });
 
-    // Texte invitation
+    // Texte
     doc.setFontSize(6.8);
-    doc.setFont("helvetica","normal");
-    doc.setTextColor(80,45,10);
     var lines = doc.splitTextToSize(
       "C'est avec un immense bonheur que nous vous invitons a etre temoins de notre promesse de mariage",
-      W-28
+      W - 28
     );
-    doc.text(lines,W/2,94,{align:"center"});
+    doc.text(lines, W / 2, 94, { align: "center" });
 
     // Séparateur
-    doc.setTextColor(204,85,0);
+    doc.setTextColor(204, 85, 0);
     doc.setFontSize(9);
-    doc.text("* * *",W/2,106,{align:"center"});
+    doc.text("* * *", W / 2, 106, { align: "center" });
 
-    // Boîte date
-    doc.setFillColor(26,14,0);
-    doc.roundRect(W/2-28,110,56,24,3,"F");
-    doc.setDrawColor(204,85,0);
+    // Bloc date (FIX roundRect)
+    doc.setFillColor(26, 14, 0);
+    roundRect(doc, W / 2 - 28, 110, 56, 24, 3, "F");
+
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(0.8);
-    doc.roundRect(W/2-28,110,56,24,3,"S");
+    roundRect(doc, W / 2 - 28, 110, 56, 24, 3, "S");
 
-    doc.setTextColor(204,85,0);
-    doc.setFontSize(6.5);
-    doc.setFont("helvetica","normal");
-    doc.text("SAMEDI",W/2,117,{align:"center"});
+    doc.setTextColor(232, 114, 42);
     doc.setFontSize(18);
-    doc.setFont("helvetica","bold");
-    doc.setTextColor(232,114,42);
-    doc.text("27",W/2,127,{align:"center"});
-    doc.setFontSize(6.5);
-    doc.setFont("helvetica","normal");
-    doc.setTextColor(184,115,51);
-    doc.text("JUIN 2026",W/2-34,119);
-    doc.text("17H00",W/2+18,119);
+    doc.setFont("helvetica", "bold");
+    doc.text("27", W / 2, 127, { align: "center" });
 
     // Lieu
-    doc.setTextColor(26,14,0);
+    doc.setTextColor(26, 14, 0);
     doc.setFontSize(6.5);
-    doc.setFont("helvetica","bold");
-    doc.text("LIEU DE LA CEREMONIE",W/2,140,{align:"center"});
+    doc.text("LIEU DE LA CEREMONIE", W / 2, 140, { align: "center" });
+
     doc.setFontSize(7.5);
-    doc.setFont("helvetica","normal");
-    doc.setTextColor(80,45,10);
-    doc.text("Nyom Messassi, 600 Lots",W/2,147,{align:"center"});
-    doc.text("Yaounde, Cameroun",W/2,153,{align:"center"});
+    doc.text("Nyom Messassi, 600 Lots", W / 2, 147, { align: "center" });
+    doc.text("Yaounde, Cameroun", W / 2, 153, { align: "center" });
 
-    // Ligne pointillée
-    doc.setDrawColor(204,85,0);
+    // Ligne
+    doc.setDrawColor(204, 85, 0);
     doc.setLineWidth(0.4);
-    doc.setLineDashPattern([2,3],0);
-    doc.line(12,158,W-12,158);
-    doc.setLineDashPattern([],0);
+    doc.setLineDashPattern([2, 3], 0);
+    doc.line(12, 158, W - 12, 158);
+    doc.setLineDashPattern([], 0);
 
-    // Section invité
-    doc.setTextColor(204,85,0);
-    doc.setFontSize(6);
-    doc.setFont("helvetica","normal");
-    doc.text("INVITE(E) D'HONNEUR",W/2,165,{align:"center"});
-
-    doc.setTextColor(26,14,0);
+    // Invité
     doc.setFontSize(12);
-    doc.setFont("helvetica","bold");
-    doc.text(g.ti+" "+g.fn+" "+g.ln,W/2,173,{align:"center"});
+    doc.setFont("helvetica", "bold");
+    doc.text(g.ti + " " + g.fn + " " + g.ln, W / 2, 173, { align: "center" });
 
-    // Badge table & zone
-    doc.setFillColor(204,85,0);
-    doc.roundRect(W/2-32,176,64,12,2,"F");
-    doc.setTextColor(255,255,255);
+    // Badge
+    doc.setFillColor(204, 85, 0);
+    roundRect(doc, W / 2 - 32, 176, 64, 12, 2, "F");
+
+    doc.setTextColor(255, 255, 255);
     doc.setFontSize(7);
-    doc.setFont("helvetica","bold");
-    doc.text("TABLE N "+g.tb+"   ·   "+zlbl(g.zn),W/2,184,{align:"center"});
+    doc.text("TABLE N° " + g.tb + " · " + zlbl(g.zn), W / 2, 184, { align: "center" });
 
-    // Régime
+    // Menu
     if (g.dt) {
-      doc.setTextColor(130,85,40);
+      doc.setTextColor(130, 85, 40);
       doc.setFontSize(6);
-      doc.setFont("helvetica","italic");
-      doc.text("Menu : "+g.dt,W/2,191,{align:"center"});
+      doc.text("Menu : " + g.dt, W / 2, 191, { align: "center" });
     }
 
-    // QR Code
+    // QR
     if (qrImg) {
-      doc.setFillColor(255,255,255);
-      doc.setDrawColor(204,85,0);
-      doc.setLineWidth(0.8);
-      doc.roundRect(W/2-13,193,26,15,1,"FD");
-      doc.addImage(qrImg,"PNG",W/2-12,194,24,13);
+      doc.setFillColor(255, 255, 255);
+      doc.setDrawColor(204, 85, 0);
+
+      roundRect(doc, W / 2 - 13, 193, 26, 15, 1, "FD");
+
+      doc.addImage(qrImg, "PNG", W / 2 - 12, 194, 24, 13);
     }
 
-    // ID invité
-    doc.setTextColor(180,140,100);
-    doc.setFontSize(5);
-    doc.text(g.id,W/2,208,{align:"center"});
+    // Bas
+    doc.setFillColor(26, 14, 0);
+    doc.rect(0, H - 9, W, 9, "F");
 
-    // Bande noire bas
-    doc.setFillColor(26,14,0);
-    doc.rect(0,H-9,W,9,"F");
-    doc.setTextColor(204,85,0);
+    doc.setTextColor(204, 85, 0);
     doc.setFontSize(5.5);
-    doc.text("* Billet nominatif non transferable *",W/2,H-3.5,{align:"center"});
+    doc.text("* Billet nominatif non transferable *", W / 2, H - 3.5, { align: "center" });
 
-    doc.save("invitation_"+g.fn+"_"+g.ln+".pdf");
-    notify("Invitation de "+fn(g)+" generee !");
+    doc.save("invitation_" + g.fn + "_" + g.ln + ".pdf");
 
-  } catch(err) {
+    notify("Invitation generee !");
+  } catch (err) {
     console.error(err);
-    notify("Erreur generation billet","err");
+    notify("Erreur generation billet", "err");
   }
 }
 
