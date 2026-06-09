@@ -202,6 +202,7 @@ footer{background:var(--ink);padding:70px 50px;text-align:center;border-top:1px 
 .mt10{margin-top:10px}
 @media(max-width:900px){.adm-body{grid-template-columns:1fr}.adm-left{position:static;max-height:none}}
 @media(max-width:768px){#nav{padding:0 20px}.nav-links{display:none}.section{padding:80px 20px}.adm-header{padding:12px 15px;height:auto}.adm-left,.adm-right{padding:20px}.modal{padding:30px 20px}.countdown{gap:12px}.form-row{grid-template-columns:1fr}}
+
 .vip-ticket{
   width:800px;
   height:1130px;
@@ -405,16 +406,316 @@ footer{background:var(--ink);padding:70px 50px;text-align:center;border-top:1px 
 }
 
 .page1{
-  background:
-radial-gradient(
-circle at center,
-rgba(212,175,55,.18),
-transparent 55%
-),
-linear-gradient(
-135deg,
-#030303,
-#101010
+/* =====================================================
+   BILLET VIP ROYAL - PAGE 1
+===================================================== */
+
+.vip-page{
+    width:800px;
+    height:1130px;
+    position:relative;
+    overflow:hidden;
+    box-sizing:border-box;
+    background:#050505;
+    border:8px solid #d4af37;
+    font-family:'Montserrat',sans-serif;
+}
+
+/* Cadre intérieur */
+
+.gold-frame{
+    position:absolute;
+    inset:15px;
+    border:1px solid rgba(212,175,55,.45);
+    pointer-events:none;
+}
+
+.gold-frame::before,
+.gold-frame::after{
+    content:"";
+    position:absolute;
+    width:80px;
+    height:80px;
+}
+
+.gold-frame::before{
+    top:-2px;
+    left:-2px;
+    border-top:4px solid #d4af37;
+    border-left:4px solid #d4af37;
+}
+
+.gold-frame::after{
+    right:-2px;
+    bottom:-2px;
+    border-right:4px solid #d4af37;
+    border-bottom:4px solid #d4af37;
+}
+
+/* Monogramme */
+
+.vy-bg{
+    position:absolute;
+    top:20px;
+    left:50%;
+    transform:translateX(-50%);
+
+    font-family:'Cinzel';
+    font-size:120px;
+    font-weight:700;
+
+    color:#d4af37;
+
+    text-shadow:
+        0 0 10px #d4af37,
+        0 0 25px #d4af37;
+
+    z-index:10;
+}
+
+/* Photo ronde */
+
+.hero-photo{
+    width:500px;
+    height:500px;
+
+    margin:140px auto 0;
+
+    border-radius:50%;
+    overflow:hidden;
+
+    position:relative;
+
+    border:4px solid #d4af37;
+
+    box-shadow:
+        0 0 20px rgba(212,175,55,.6),
+        0 0 60px rgba(212,175,55,.3);
+}
+
+.hero-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+}
+
+/* Halo */
+
+.hero-photo::after{
+    content:"";
+
+    position:absolute;
+    inset:0;
+
+    background:
+        radial-gradient(
+            circle,
+            transparent 50%,
+            rgba(0,0,0,.15)
+        );
+}
+
+/* Noms */
+
+.couple-name{
+    text-align:center;
+
+    color:white;
+
+    font-family:'Cinzel';
+
+    font-size:60px;
+
+    margin-top:30px;
+
+    letter-spacing:3px;
+}
+
+/* Sous titre */
+
+.subtitle{
+    text-align:center;
+
+    color:#d4af37;
+
+    font-size:14px;
+
+    letter-spacing:6px;
+
+    margin-top:8px;
+}
+
+/* invité */
+
+.guest-box{
+    text-align:center;
+    margin-top:40px;
+}
+
+.guest-label{
+    color:#d4af37;
+
+    font-size:12px;
+
+    letter-spacing:4px;
+
+    margin-bottom:10px;
+}
+
+.guest-name{
+    color:white;
+
+    font-size:42px;
+
+    font-family:'Playfair Display';
+
+    font-style:italic;
+}
+
+/* message */
+
+.message{
+    width:80%;
+
+    margin:40px auto;
+
+    text-align:center;
+
+    color:#f2f2f2;
+
+    line-height:1.8;
+
+    font-size:18px;
+}
+
+/* date */
+
+.date-box{
+    text-align:center;
+    margin-top:20px;
+}
+
+.date-box .label{
+    color:#d4af37;
+    letter-spacing:4px;
+    font-size:12px;
+}
+
+.date-box .day{
+    font-size:90px;
+    color:#d4af37;
+    font-family:'Cinzel';
+    line-height:1;
+}
+
+.date-box .month{
+    color:white;
+    font-size:20px;
+}
+
+/* lieu */
+
+.location{
+    text-align:center;
+    margin-top:35px;
+}
+
+.location h3{
+    color:#d4af37;
+    margin-bottom:10px;
+}
+
+.location p{
+    color:white;
+    line-height:1.6;
+}
+
+/* table zone menu */
+
+.infos{
+    display:flex;
+    justify-content:space-around;
+
+    margin-top:40px;
+}
+
+.infos div{
+    text-align:center;
+}
+
+.infos span{
+    display:block;
+
+    color:#d4af37;
+
+    margin-bottom:8px;
+
+    font-size:13px;
+
+    letter-spacing:2px;
+}
+
+.infos strong{
+    color:white;
+    font-size:24px;
+}
+
+/* QR */
+
+.qr-section{
+    display:flex;
+    justify-content:center;
+    margin-top:40px;
+}
+
+.qr-wrapper{
+    width:220px;
+    height:220px;
+
+    background:white;
+
+    padding:10px;
+
+    border:5px solid #d4af37;
+
+    border-radius:10px;
+
+    box-shadow:
+        0 0 20px rgba(212,175,55,.4);
+}
+
+.qr-wrapper img{
+    width:100%;
+    height:100%;
+}
+
+/* Citation */
+
+.quote{
+    text-align:center;
+
+    margin-top:20px;
+
+    color:#d4af37;
+
+    font-style:italic;
+
+    font-size:20px;
+}
+
+/* ID */
+
+.vip-id{
+    text-align:center;
+
+    margin-top:15px;
+
+    color:#8b6914;
+
+    font-size:12px;
+
+    letter-spacing:3px;
+}
 );
 
   border:8px solid #d4af37;
