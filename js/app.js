@@ -432,7 +432,266 @@ function roundRect(doc, x, y, w, h, r = 0, style = "S") {
   doc.setLineJoin(1);
   doc.rect(x, y, w, h, style);
 }
+const GOLD_1 = "#FCE7A1";
+const GOLD_2 = "#D4AF37";
+const GOLD_3 = "#9C6F10";
+const GOLD_4 = "#6A4B00";
 
+function drawLuxuryBackground(ctx, W, H) {
+
+  const bg = ctx.createLinearGradient(0,0,0,H);
+
+  bg.addColorStop(0,"#020202");
+  bg.addColorStop(0.25,"#090909");
+  bg.addColorStop(0.5,"#111111");
+  bg.addColorStop(0.75,"#080808");
+  bg.addColorStop(1,"#020202");
+
+  ctx.fillStyle = bg;
+  ctx.fillRect(0,0,W,H);
+
+  for(let i=0;i<3500;i++){
+
+    const x=Math.random()*W;
+    const y=Math.random()*H;
+
+    const a=Math.random()*0.05;
+
+    ctx.fillStyle=`rgba(255,255,255,${a})`;
+
+    ctx.fillRect(x,y,2,2);
+  }
+}
+
+function drawRoyalFrame(ctx,W,H){
+
+  ctx.strokeStyle=GOLD_2;
+  ctx.lineWidth=6;
+
+  ctx.strokeRect(20,20,W-40,H-40);
+
+  ctx.strokeStyle=GOLD_3;
+  ctx.lineWidth=2;
+
+  ctx.strokeRect(45,45,W-90,H-90);
+
+  ctx.strokeStyle="rgba(212,175,55,.3)";
+  ctx.lineWidth=1;
+
+  ctx.strokeRect(58,58,W-116,H-116);
+}
+
+function drawRoyalCorner(ctx,x,y,flipX=false,flipY=false){
+
+  ctx.save();
+
+  ctx.translate(x,y);
+
+  ctx.scale(
+    flipX?-1:1,
+    flipY?-1:1
+  );
+
+  ctx.strokeStyle=GOLD_2;
+
+  ctx.lineWidth=3;
+
+  ctx.beginPath();
+
+  ctx.moveTo(0,100);
+
+  ctx.bezierCurveTo(
+    0,30,
+    30,0,
+    100,0
+  );
+
+  ctx.stroke();
+
+  ctx.beginPath();
+
+  ctx.arc(
+    35,
+    35,
+    18,
+    0,
+    Math.PI*2
+  );
+
+  ctx.stroke();
+
+  ctx.beginPath();
+
+  ctx.arc(
+    60,
+    18,
+    8,
+    0,
+    Math.PI*2
+  );
+
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawAllCorners(ctx,W,H){
+
+  drawRoyalCorner(ctx,35,35);
+
+  drawRoyalCorner(
+    ctx,
+    W-35,
+    35,
+    true,
+    false
+  );
+
+  drawRoyalCorner(
+    ctx,
+    35,
+    H-35,
+    false,
+    true
+  );
+
+  drawRoyalCorner(
+    ctx,
+    W-35,
+    H-35,
+    true,
+    true
+  );
+}
+
+function drawGoldenHalo(ctx,W){
+
+  const halo =
+    ctx.createRadialGradient(
+      W/2,
+      900,
+      50,
+      W/2,
+      900,
+      850
+    );
+
+  halo.addColorStop(
+    0,
+    "rgba(255,210,80,.45)"
+  );
+
+  halo.addColorStop(
+    .4,
+    "rgba(255,180,30,.18)"
+  );
+
+  halo.addColorStop(
+    1,
+    "rgba(0,0,0,0)"
+  );
+
+  ctx.fillStyle=halo;
+
+  ctx.fillRect(
+    0,
+    0,
+    W,
+    1800
+  );
+}
+
+function drawRoyalCircle(ctx,W){
+
+  ctx.save();
+
+  ctx.shadowColor=GOLD_2;
+  ctx.shadowBlur=45;
+
+  ctx.strokeStyle=GOLD_2;
+
+  ctx.lineWidth=5;
+
+  ctx.beginPath();
+
+  ctx.arc(
+    W/2,
+    930,
+    540,
+    0,
+    Math.PI*2
+  );
+
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+function drawGoldenParticles(ctx,W,H){
+
+  for(let i=0;i<450;i++){
+
+    const x=Math.random()*W;
+
+    const y=Math.random()*1900;
+
+    const r=Math.random()*6+1;
+
+    const alpha=
+      Math.random()*0.6;
+
+    ctx.beginPath();
+
+    ctx.arc(
+      x,
+      y,
+      r,
+      0,
+      Math.PI*2
+    );
+
+    ctx.fillStyle=
+      `rgba(255,215,90,${alpha})`;
+
+    ctx.fill();
+  }
+}
+function drawMonogram(ctx,W){
+
+  const cx=W/2;
+
+  ctx.save();
+
+  ctx.textAlign="center";
+
+  ctx.font=
+    "bold 260px Georgia";
+
+  const grad=
+    ctx.createLinearGradient(
+      cx,
+      100,
+      cx,
+      420
+    );
+
+  grad.addColorStop(0,GOLD_1);
+  grad.addColorStop(.5,GOLD_2);
+  grad.addColorStop(1,GOLD_4);
+
+  ctx.shadowColor=GOLD_2;
+  ctx.shadowBlur=60;
+
+  ctx.fillStyle=grad;
+
+  ctx.fillText(
+    "VY",
+    cx,
+    350
+  );
+
+  ctx.restore();
+}
 // =========================================================
 //  NOUVEAU genPDF() — Invitation Royale 2 pages
 // =========================================================
@@ -562,12 +821,6 @@ async function genPDF(id) {
     const ctx = page1.getContext("2d");
 
     // Fond
-    const bg = ctx.createLinearGradient(0, 0, 0, H);
-    bg.addColorStop(0, "#050505");
-    bg.addColorStop(0.5, "#101010");
-    bg.addColorStop(1, "#000000");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, W, H);
 
     // Halo central
     const halo = ctx.createRadialGradient(W/2, 950, 50, W/2, 950, 900);
@@ -576,35 +829,25 @@ async function genPDF(id) {
     ctx.fillStyle = halo;
     ctx.fillRect(0,0,W,H);
 
+    drawLuxuryBackground(ctx,W,H);
+
+drawGoldenHalo(ctx,W);
+
+drawRoyalFrame(ctx,W,H);
+
+drawAllCorners(ctx,W,H);
+
+drawGoldenParticles(ctx,W,H);
+
+drawRoyalCircle(ctx,W);
+
+drawMonogram(ctx,W);
+
     // Bordures
-    roundRect(ctx, 18, 18, W-36, H-36, 28, null, gold, 6);
-    roundRect(ctx, 42, 42, W-84, H-84, 20, null, goldD, 2);
 
     // Ornements
-    cornerOrnament(ctx, 48, 48, 90, false, false);
-    cornerOrnament(ctx, W-48, 48, 90, true, false);
-    cornerOrnament(ctx, 48, H-48, 90, false, true);
-    cornerOrnament(ctx, W-48, H-48, 90, true, true);
-
-    const centerX = W/2;
 
     // Monogramme VY
-    ctx.save();
-    ctx.font = "bold 260px Georgia";
-    ctx.textAlign = "center";
-    ctx.shadowColor = gold;
-    ctx.shadowBlur = 60;
-
-    const goldGradient = ctx.createLinearGradient(centerX, 120, centerX, 420);
-    goldGradient.addColorStop(0, goldL);
-    goldGradient.addColorStop(0.5, gold);
-    goldGradient.addColorStop(1, goldD);
-
-    ctx.fillStyle = goldGradient;
-    ctx.fillText("VY", centerX, 320);
-    ctx.restore();
-
-    decorativeLine(ctx, centerX, 390, 900, goldD);
 
     // Cercle royal
     ctx.save();
@@ -723,7 +966,7 @@ async function genPDF(id) {
 
     // Titre
     text(c2, "PROGRAMME DU MARIAGE", centerX, 470, "bold 80px Georgia", white, "center");
-    text(c2, "Samedi 27 Décembre 2026", centerX, 560, "italic 36px Georgia", gold, "center");
+    text(c2, "Samedi 27 Juin 2026", centerX, 560, "italic 36px Georgia", gold, "center");
 
     decorativeLine(c2, centerX, 620, 700, goldD);
 
