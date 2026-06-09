@@ -566,8 +566,14 @@ async function genPDF(id) {
     }
 
     /* ── 4. FOND GLOBAL ─────────────────────────────────────────────── */
-    fillRect(0, 0, W, H, black);
+const bg = ctx.createLinearGradient(0,0,0,H);
 
+bg.addColorStop(0,"#050505");
+bg.addColorStop(0.5,"#111111");
+bg.addColorStop(1,"#000000");
+
+ctx.fillStyle = bg;
+ctx.fillRect(0,0,W,H);
     // Bordure extérieure or
     roundRect(18, 18, W - 36, H - 36, 24, null, gold, 5);
     // Bordure intérieure fine
@@ -595,6 +601,29 @@ async function genPDF(id) {
     const px = (leftW - pw) / 2;
     const py = 0;
     ctx.drawImage(coupleImg, px, py, pw, ph);
+    // Halo doré derrière les mariés
+const halo = ctx.createRadialGradient(
+  leftW * 0.5,
+  leftH * 0.35,
+  10,
+  leftW * 0.5,
+  leftH * 0.35,
+  500
+);
+
+halo.addColorStop(0, "rgba(255,215,0,0.55)");
+halo.addColorStop(0.4, "rgba(255,180,0,0.25)");
+halo.addColorStop(1, "rgba(0,0,0,0)");
+
+ctx.fillStyle = halo;
+ctx.fillRect(0,0,leftW,leftH);
+
+// Cercle royal
+ctx.beginPath();
+ctx.arc(leftW/2, leftH*0.32, 430, 0, Math.PI*2);
+ctx.strokeStyle = "#d4af37";
+ctx.lineWidth = 4;
+ctx.stroke();
 
     // Dégradé sombre bas (pour le texte)
     const gradB = ctx.createLinearGradient(0, leftH * 0.45, 0, leftH);
@@ -620,8 +649,29 @@ async function genPDF(id) {
     ctx.save();
     ctx.shadowColor = gold;
     ctx.shadowBlur  = 40;
-    text("VY", monoX, monoY, `bold ${Math.floor(W * 0.14)}px Georgia, serif`, gold, "center");
-    ctx.restore();
+ctx.save();
+
+ctx.font = "bold 260px Georgia";
+ctx.textAlign = "center";
+
+ctx.shadowColor = "#d4af37";
+ctx.shadowBlur = 50;
+
+const goldGradient = ctx.createLinearGradient(
+  monoX,
+  monoY - 150,
+  monoX,
+  monoY + 150
+);
+
+goldGradient.addColorStop(0,"#fff0a5");
+goldGradient.addColorStop(0.5,"#d4af37");
+goldGradient.addColorStop(1,"#8b6914");
+
+ctx.fillStyle = goldGradient;
+ctx.fillText("VY", monoX, monoY);
+
+ctx.restore();
 
     // Rameau décoratif sous le monogramme
     decorativeLine(monoX, monoY + 18, leftW * 0.7, goldD);
