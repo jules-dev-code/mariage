@@ -448,6 +448,8 @@ function roundRect(doc, x, y, w, h, r = 0, style = "S") {
  */
 
 async function genPDF(id) {
+    console.log("NOUVEAU PDF CHARGE");
+
   const g = guests.find(x => x.id === id);
   if (!g) return;
   notify("Génération du billet...", "inf");
