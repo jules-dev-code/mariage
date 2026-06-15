@@ -1,38 +1,29 @@
 /* =====================================================
-VANINA & YVAN - BILLET VIP ROYAL
-PAGE 1 + PAGE 2
+BILLET VIP ROYAL
 ===================================================== */
 
-width:800px;.vip-page{
-
-height:1130px;
-position;
-overflow;
-box-sizing;
-font-family:'Montserrat',sans-serif;
+.vip-page{
+    width:800px;
+    height:1130px;
+    position:relative;
+    overflow:hidden;
+    box-sizing:border-box;
+    font-family:'Montserrat',sans-serif;
+    color:#fff;
 }
 
 /* =====================================================
 PAGE 1
 ===================================================== */
 
-.page1{
-background:
-radial-gradient(
-circle at center,
-rgba(212,175,55,.12),
-transparent 55%
-),
-linear-gradient(
-135deg,
-#030303,
-#101010
-);
+#page1{
+    background:
+    radial-gradient(circle at center,
+    rgba(212,175,55,.15),
+    transparent 60%),
+    linear-gradient(135deg,#050505,#111111);
 
-```
-border:8px solid #d4af37;
-```
-
+    border:8px solid #d4af37;
 }
 
 /* =====================================================
@@ -40,50 +31,32 @@ CADRE OR
 ===================================================== */
 
 .gold-frame{
-position;
-inset:15px;
-
-```
-border:1px solid rgba(212,175,55,.45);
-
-pointer-events:none;
-```
-
+    position:absolute;
+    inset:15px;
+    border:1px solid rgba(212,175,55,.4);
+    pointer-events:none;
 }
 
 .gold-frame::before,
 .gold-frame::after{
-content:"";
-
-```
-position:absolute;
-
-width:80px;
-height:80px;
-```
-
+    content:"";
+    position:absolute;
+    width:90px;
+    height:90px;
 }
 
 .gold-frame::before{
-top:-2px;
-left:-2px;
-
-```
-border-top:4px solid #d4af37;
-border-left:4px solid #d4af37;
-```
-
+    top:-2px;
+    left:-2px;
+    border-top:4px solid #d4af37;
+    border-left:4px solid #d4af37;
 }
 
 .gold-frame::after{
-right:-2px;
-bottom:-2px;
-
-```
-border-right:4px solid #d4af37;
-border-bottom:4px solid #d4af37;
-```
-
+    right:-2px;
+    bottom:-2px;
+    border-right:4px solid #d4af37;
+    border-bottom:4px solid #d4af37;
 }
 
 /* =====================================================
@@ -91,27 +64,19 @@ MONOGRAMME
 ===================================================== */
 
 .vy-bg{
-position;
+    position:absolute;
+    top:25px;
+    left:50%;
+    transform:translateX(-50%);
+    font-family:'Cinzel',serif;
+    font-size:120px;
+    font-weight:700;
+    color:#d4af37;
+    z-index:20;
 
-```
-top:20px;
-left:50%;
-
-transform:translateX(-50%);
-
-font-family:'Cinzel';
-font-size:120px;
-font-weight:700;
-
-color:#d4af37;
-
-text-shadow:
+    text-shadow:
     0 0 10px #d4af37,
-    0 0 25px #d4af37;
-
-z-index:20;
-```
-
+    0 0 25px rgba(212,175,55,.8);
 }
 
 /* =====================================================
@@ -119,87 +84,43 @@ PHOTO
 ===================================================== */
 
 .hero-photo{
-width:500px;
-height:500px;
+    width:500px;
+    height:500px;
+    margin:140px auto 0;
+    border-radius:50%;
+    overflow:hidden;
+    border:4px solid #d4af37;
 
-```
-margin:140px auto 0;
-
-border-radius:50%;
-overflow:hidden;
-
-position:relative;
-
-border:4px solid #d4af37;
-
-box-shadow:
-    0 0 25px rgba(212,175,55,.7),
-    0 0 80px rgba(212,175,55,.25);
-```
-
+    box-shadow:
+    0 0 20px rgba(212,175,55,.6),
+    0 0 60px rgba(212,175,55,.25);
 }
 
 .hero-photo img{
-width:100%;
-height:100%;
-
-```
-object-fit:cover;
-```
-
-}
-
-.hero-photo::after{
-content:"";
-
-```
-position:absolute;
-inset:0;
-
-background:
-    radial-gradient(
-        circle,
-        transparent 60%,
-        rgba(0,0,0,.18)
-    );
-```
-
+    width:100%;
+    height:100%;
+    object-fit:cover;
 }
 
 /* =====================================================
-COUPLE
+NOMS
 ===================================================== */
 
 .couple-name{
-margin-top:28px;
-
-```
-text-align:center;
-
-color:white;
-
-font-family:'Cinzel';
-
-font-size:58px;
-
-letter-spacing:3px;
-```
-
+    text-align:center;
+    margin-top:30px;
+    color:white;
+    font-family:'Cinzel',serif;
+    font-size:52px;
+    letter-spacing:3px;
 }
 
 .subtitle{
-text-align;
-
-```
-color:#d4af37;
-
-letter-spacing:6px;
-
-font-size:14px;
-
-margin-top:10px;
-```
-
+    text-align:center;
+    margin-top:8px;
+    color:#d4af37;
+    letter-spacing:5px;
+    font-size:14px;
 }
 
 /* =====================================================
@@ -207,38 +128,22 @@ INVITE
 ===================================================== */
 
 .guest-box{
-text-align;
-
-```
-margin-top:35px;
-```
-
+    text-align:center;
+    margin-top:35px;
 }
 
 .guest-label{
-color:#d4af37;
-
-```
-font-size:12px;
-
-letter-spacing:4px;
-
-margin-bottom:10px;
-```
-
+    color:#d4af37;
+    letter-spacing:4px;
+    font-size:12px;
+    margin-bottom:10px;
 }
 
 .guest-name{
-color;
-
-```
-font-size:42px;
-
-font-family:'Playfair Display';
-
-font-style:italic;
-```
-
+    color:white;
+    font-size:42px;
+    font-family:'Playfair Display',serif;
+    font-style:italic;
 }
 
 /* =====================================================
@@ -246,20 +151,12 @@ MESSAGE
 ===================================================== */
 
 .message{
-width:80%;
-
-```
-margin:35px auto;
-
-text-align:center;
-
-color:#f3f3f3;
-
-font-size:18px;
-
-line-height:1.8;
-```
-
+    width:80%;
+    margin:35px auto;
+    text-align:center;
+    color:#f3f3f3;
+    font-size:18px;
+    line-height:1.8;
 }
 
 /* =====================================================
@@ -267,40 +164,25 @@ DATE
 ===================================================== */
 
 .date-box{
-text-align;
+    text-align:center;
 }
 
 .date-box .label{
-color:#d4af37;
-
-```
-font-size:12px;
-
-letter-spacing:4px;
-```
-
+    color:#d4af37;
+    letter-spacing:4px;
+    font-size:12px;
 }
 
 .date-box .day{
-font-size:90px;
-
-```
-color:#d4af37;
-
-font-family:'Cinzel';
-
-line-height:1;
-```
-
+    color:#d4af37;
+    font-family:'Cinzel',serif;
+    font-size:90px;
+    line-height:1;
 }
 
 .date-box .month{
-color;
-
-```
-font-size:20px;
-```
-
+    color:white;
+    font-size:20px;
 }
 
 /* =====================================================
@@ -308,79 +190,48 @@ LIEU
 ===================================================== */
 
 .location{
-text-align;
-
-```
-margin-top:30px;
-```
-
+    text-align:center;
+    margin-top:30px;
 }
 
 .location h3{
-color:#d4af37;
-
-```
-margin-bottom:10px;
-
-font-size:18px;
-```
-
+    color:#d4af37;
+    font-size:18px;
+    margin-bottom:10px;
 }
 
 .location p{
-color;
-
-```
-line-height:1.7;
-
-font-size:17px;
-```
-
+    color:white;
+    line-height:1.7;
+    font-size:17px;
 }
 
 /* =====================================================
-TABLE / ZONE / MENU
+INFOS
 ===================================================== */
 
 .infos{
-display;
-
-```
-justify-content:space-around;
-
-margin-top:40px;
-
-padding:0 40px;
-```
-
+    display:flex;
+    justify-content:space-around;
+    margin-top:40px;
+    padding:0 40px;
 }
 
 .infos div{
-text-align;
+    text-align:center;
 }
 
 .infos span{
-display;
-
-```
-color:#d4af37;
-
-margin-bottom:8px;
-
-letter-spacing:2px;
-
-font-size:12px;
-```
-
+    display:block;
+    color:#d4af37;
+    margin-bottom:8px;
+    letter-spacing:2px;
+    font-size:12px;
 }
 
 .infos strong{
-color;
-
-```
-font-size:24px;
-```
-
+    color:white;
+    font-size:24px;
 }
 
 /* =====================================================
@@ -388,38 +239,23 @@ QR
 ===================================================== */
 
 .qr-section{
-display;
-
-```
-justify-content:center;
-
-margin-top:40px;
-```
-
+    display:flex;
+    justify-content:center;
+    margin-top:40px;
 }
 
 .qr-wrapper{
-width:220px;
-height:220px;
-
-```
-background:white;
-
-padding:10px;
-
-border:5px solid #d4af37;
-
-border-radius:10px;
-
-box-shadow:
-    0 0 20px rgba(212,175,55,.4);
-```
-
+    width:220px;
+    height:220px;
+    background:white;
+    padding:10px;
+    border:4px solid #d4af37;
+    border-radius:12px;
 }
 
 .qr-wrapper img{
-width:100%;
-height:100%;
+    width:100%;
+    height:100%;
 }
 
 /* =====================================================
@@ -427,37 +263,19 @@ CITATION
 ===================================================== */
 
 .quote{
-text-align;
-
-```
-color:#d4af37;
-
-font-style:italic;
-
-font-size:20px;
-
-margin-top:20px;
-```
-
+    text-align:center;
+    color:#d4af37;
+    font-style:italic;
+    font-size:18px;
+    margin-top:20px;
 }
 
-/* =====================================================
-ID
-===================================================== */
-
 .vip-id{
-text-align;
-
-```
-color:#8b6914;
-
-font-size:12px;
-
-letter-spacing:3px;
-
-margin-top:15px;
-```
-
+    text-align:center;
+    margin-top:12px;
+    color:#8b6914;
+    font-size:12px;
+    letter-spacing:3px;
 }
 
 /* =====================================================
@@ -465,210 +283,108 @@ PAGE 2
 ===================================================== */
 
 .page2{
-background:
-linear-gradient(
-135deg,
-#050505,
-#151515
-);
+    background:
+    linear-gradient(135deg,#050505,#151515);
 
-```
-border:8px solid #d4af37;
-
-padding:60px;
-```
-
+    border:8px solid #d4af37;
+    padding:60px;
+    box-sizing:border-box;
 }
 
-/* =====================================================
-HEADER
-===================================================== */
-
 .program-header{
-text-align;
+    text-align:center;
 }
 
 .crown{
-color:#d4af37;
-
-```
-font-size:60px;
-```
-
+    font-size:60px;
+    color:#d4af37;
 }
 
 .program-header h1{
-color;
-
-```
-font-family:'Cinzel';
-
-font-size:42px;
-
-margin-top:10px;
-
-letter-spacing:3px;
-```
-
+    color:white;
+    font-family:'Cinzel',serif;
+    font-size:42px;
+    letter-spacing:3px;
 }
 
-/* =====================================================
-SEPARATEURS
-===================================================== */
-
 .separator{
-width:250px;
-height:2px;
-
-```
-background:#d4af37;
-
-margin:25px auto;
-```
-
+    width:250px;
+    height:2px;
+    background:#d4af37;
+    margin:25px auto;
 }
 
 .separator.large{
-margin:40px auto;
+    margin:40px auto;
 }
 
-/* =====================================================
-TIMELINE
-===================================================== */
-
 .timeline{
-margin-top:20px;
+    margin-top:20px;
 }
 
 .timeline-item{
-display;
-
-```
-align-items:center;
-
-margin-bottom:22px;
-```
-
+    display:flex;
+    align-items:center;
+    margin-bottom:22px;
 }
 
 .time{
-width:120px;
-
-```
-color:#d4af37;
-
-font-family:'Cinzel';
-
-font-size:22px;
-```
-
+    width:120px;
+    color:#d4af37;
+    font-size:22px;
+    font-family:'Cinzel',serif;
 }
 
 .event{
-color;
-
-```
-font-size:20px;
-```
-
+    color:white;
+    font-size:20px;
 }
-
-/* =====================================================
-BLOCS
-===================================================== */
 
 .dress-code,
 .gift-section,
 .map-section{
-text-align;
+    text-align:center;
 }
 
 .dress-code h2,
 .gift-section h2,
 .map-section h2{
-color:#d4af37;
-
-```
-margin-bottom:20px;
-
-font-family:'Cinzel';
-
-letter-spacing:2px;
-```
-
+    color:#d4af37;
+    margin-bottom:20px;
+    font-family:'Cinzel',serif;
 }
 
 .colors{
-display;
-
-```
-justify-content:center;
-
-gap:25px;
-
-color:white;
-
-font-size:22px;
-```
-
+    display:flex;
+    justify-content:center;
+    gap:25px;
+    color:white;
+    font-size:22px;
 }
 
-.gift-section p{
-color;
-
-```
-line-height:1.8;
-
-font-size:18px;
-
-margin-bottom:12px;
-```
-
-}
-
+.gift-section p,
 .map-section p{
-color;
-
-```
-line-height:1.8;
-
-font-size:18px;
-```
-
+    color:white;
+    line-height:1.8;
+    font-size:18px;
 }
-
-/* =====================================================
-QR MAP
-===================================================== */
 
 .map-qr{
-width:180px;
-height:180px;
-
-```
-margin:25px auto;
-
-background:white;
-
-padding:10px;
-
-border:4px solid #d4af37;
-```
-
+    width:180px;
+    height:180px;
+    margin:25px auto;
+    background:white;
+    padding:10px;
+    border:4px solid #d4af37;
 }
 
 .map-qr img{
-width:100%;
-height:100%;
+    width:100%;
+    height:100%;
 }
 
 .scan-text{
-color:#d4af37;
-
-```
-font-style:italic;
-
-margin-top:10px;
-```
-
+    color:#d4af37;
+    font-style:italic;
+    margin-top:10px;
 }
