@@ -475,8 +475,11 @@ async function genPDF(id) {
        PHOTO COUPLE
     ========================== */
 
-    const coupleImg =
-      await loadImage(COUPLE_PHOTO);
+    const currentPhoto =
+$("photoPreview").src || COUPLE_PHOTO;
+
+const coupleImg =
+await loadImage(currentPhoto);
 
     /* =========================
        CANVAS A5 HD
