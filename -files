@@ -1,0 +1,15 @@
+[1mdiff --git a/js/app.js b/js/app.js[m
+[1mindex bf0da1c..d7b751f 100644[m
+[1m--- a/js/app.js[m
+[1m+++ b/js/app.js[m
+[36m@@ -437,6 +437,10 @@[m [mfunction roundRect(doc, x, y, w, h, r = 0, style = "S") {[m
+ //  NOUVEAU genPDF() — Invitation Royale 2 pages[m
+ // =========================================================[m
+ async function genPDF(id) {[m
+[32m+[m[32m  alert("NOUVELLE VERSION");[m
+[32m+[m
+[32m+[m[32m   return;[m
+[32m+[m[41m   [m
+   const g = guests.find(x => x.id === id);[m
+   if (!g) return;[m
+ [m
