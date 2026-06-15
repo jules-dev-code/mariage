@@ -437,6 +437,10 @@ function roundRect(doc, x, y, w, h, r = 0, style = "S") {
 //  NOUVEAU genPDF() — Invitation Royale 2 pages
 // =========================================================
 async function genPDF(id) {
+  alert("NOUVELLE VERSION");
+
+   return;
+   
   const g = guests.find(x => x.id === id);
   if (!g) return;
 
