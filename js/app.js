@@ -9,7 +9,7 @@ const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZ
 const SITE_URL    = "https://mariage-beugueum-8494s-projects.vercel.app";
 
 // ── PHOTO MARIÉS (base64) ──
-const COUPLE_PHOTO = "images/couple.jpg";
+const COUPLE_PHOTO = "/images/couple.jpg";
 // ── CLIENT SUPABASE ──
 const DB = {
   async select() {
@@ -71,7 +71,7 @@ function notify(msg, type) {
   type = type || "ok";
   const n = $("notif");
   n.textContent = msg;
-  n.className = "notif n-"+type+" show";
+  n.className = "notif " + type + " show"; // ← sans le "n-"
   clearTimeout(n._t);
   n._t = setTimeout(function(){ n.classList.remove("show"); }, 3800);
 }
@@ -183,13 +183,13 @@ function openAdmin() {
   $("nav").style.display = "none";
   window.scrollTo(0,0);
   loadGuests();
-  $("photoZone").classList.add("visible");
+  $("photoZone").classList.add("open");
 }
 function closeAdmin() {
   if (scanOn) stopScan();
   $("admin").classList.remove("open");
   $("nav").style.display = "flex";
-  $("photoZone").classList.remove("visible");
+  $("photoZone").classList.remove("open");
 }
 
 // ── STATS ──
