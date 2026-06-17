@@ -752,7 +752,7 @@ async function genPDF(id) {
       ctx.fillText(icon, cx, y);
       ctx.restore();
       D.txt(label, cx, y + 42, `${Math.floor(W * 0.017)}px Georgia, serif`, cream, "center");
-      D.txt(value, cx, y + 82, `bold ${Math.floor(W * 0.028)}px Georgia, serif`, accent, "center", 330);
+      D.txt(value, cx, y + 95, `bold ${Math.floor(W * 0.028)}px Georgia, serif`, accent, "center", 330);
     }
     iconBlock("🪑", "TABLE", String(g.tb || "01").padStart(2, "0"), col1);
     D.line(col1 + 240, y - 26, col1 + 240, y + 86, accentD, 2);
