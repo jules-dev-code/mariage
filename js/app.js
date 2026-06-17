@@ -446,17 +446,22 @@ function groupWA() {
  * Page 1 : lieu retiré, photo grande, espacements vérifiés pour ne jamais déborder
  */
 
+// ── BILLET PDF LUXUEUX ──
+/**
+ * genPDF v6 — Invitation Royale 2 pages A5
+ * Page 1 : photo touche le haut du cadre, monogramme VY en overlay décalé à gauche
+ */
+
 async function genPDF(id) {
   const g = guests.find(x => x.id === id);
   if (!g) return;
   notify("Génération du billet...", "inf");
 
-  // ── PALETTE ORANGE BRÛLÉ ──
-  const accent  = "#E8893A"; // orange brûlé clair (accents/titres)
-  const accentL = "#F5B878"; // orange clair (highlights)
-  const accentD = "#8A3F12"; // orange brûlé très foncé (lignes/bordures discrètes)
-  const bg1     = "#2B1106"; // fond brun-orange très foncé (haut)
-  const bg2     = "#1A0A03"; // fond encore plus foncé (bas)
+  const accent  = "#E8893A";
+  const accentL = "#F5B878";
+  const accentD = "#8A3F12";
+  const bg1     = "#2B1106";
+  const bg2     = "#1A0A03";
   const white   = "#FFFFFF";
   const cream   = "#FBF1E6";
 
@@ -577,10 +582,7 @@ async function genPDF(id) {
 
   const margin1 = 28;
 
-  /* ════════════════ PAGE 1 ════════════════
-     Budget vertical total : H = 3307px
-     Zone utile (entre bordures) : ~3220px, marge bas réservée: 90px pour le bandeau
-  */
+  /* ════════════════ PAGE 1 ════════════════ */
   async function drawPage1() {
     const canvas = makeCanvas();
     const ctx = canvas.getContext("2d");
@@ -589,29 +591,9 @@ async function genPDF(id) {
 
     D.bg(bg1, bg2);
 
-    // ── Couronne + monogramme VY (au-dessus de la photo) ──
-    let y = 90;
-    ctx.save();
-    D.shadow(accentL, 28);
-    ctx.font = `${Math.floor(W * 0.038)}px serif`;
-    ctx.fillStyle = accentL;
-    ctx.textAlign = "center";
-    ctx.fillText("♛", CX, y);
-    D.noShadow();
-    ctx.restore();
-
-    y += 120;
-    ctx.save();
-    D.shadow(accentL, 40);
-    ctx.font = `bold ${Math.floor(W * 0.08)}px Georgia, serif`;
-    ctx.fillStyle = accent;
-    ctx.fillText("VY", CX, y);
-    D.noShadow();
-    ctx.restore();
-
-    // ── Photo — grande, ~56% de la hauteur totale ──
-    const photoTop = y + 70;
-    const photoH = Math.floor(H * 0.50);
+    // ── Photo — touche le HAUT du cadre (juste après la bordure) ──
+    const photoTop = margin1 + 24; // juste à l'intérieur du cadre
+    const photoH = Math.floor(H * 0.56); // grande, comme demandé
     const coupleImg = await loadImage(COUPLE_PHOTO + "?v=" + Date.now());
     ctx.save();
     ctx.beginPath();
@@ -620,11 +602,14 @@ async function genPDF(id) {
 
     const sc = Math.max(W / coupleImg.width, photoH / coupleImg.height);
     const pw = coupleImg.width * sc, ph = coupleImg.height * sc;
-    ctx.drawImage(coupleImg, (W - pw) / 2, photoTop, pw, ph);
+    // On décale légèrement l'image vers la droite pour que les visages
+    // restent visibles à droite, laissant la gauche pour le monogramme
+    const photoOffsetX = (W - pw) / 2 + W * 0.05;
+    ctx.drawImage(coupleImg, photoOffsetX, photoTop, pw, ph);
 
     const halo = ctx.createRadialGradient(CX, photoTop + photoH * 0.3, 0, CX, photoTop + photoH * 0.3, W * 0.6);
-    halo.addColorStop(0,   "rgba(232,137,58,0.35)");
-    halo.addColorStop(0.5, "rgba(138,63,18,0.18)");
+    halo.addColorStop(0,   "rgba(232,137,58,0.3)");
+    halo.addColorStop(0.5, "rgba(138,63,18,0.15)");
     halo.addColorStop(1,   "rgba(0,0,0,0)");
     ctx.fillStyle = halo; ctx.fillRect(0, photoTop, W, photoH);
 
@@ -637,8 +622,32 @@ async function genPDF(id) {
 
     const photoBottom = photoTop + photoH;
 
-    // ── Nom des mariés (bas de photo) ──
-    y = photoBottom - 60;
+    // ── Couronne + VY — EN OVERLAY sur la photo, décalés à gauche ──
+    // pour ne pas cacher les visages (qui sont décalés à droite via photoOffsetX)
+    const monoX = W * 0.22; // bloc décalé à gauche
+    let monoY = photoTop + 110;
+
+    ctx.save();
+    D.shadow("rgba(0,0,0,0.6)", 25); // ombre pour lisibilité sur la photo
+    ctx.font = `${Math.floor(W * 0.038)}px serif`;
+    ctx.fillStyle = accentL;
+    ctx.textAlign = "center";
+    ctx.fillText("♛", monoX, monoY);
+    D.noShadow();
+    ctx.restore();
+
+    monoY += 115; // espace fixe couronne → VY, alignés sur le même axe X
+    ctx.save();
+    D.shadow("rgba(0,0,0,0.7)", 30);
+    ctx.font = `bold ${Math.floor(W * 0.075)}px Georgia, serif`;
+    ctx.fillStyle = accent;
+    ctx.textAlign = "center";
+    ctx.fillText("VY", monoX, monoY);
+    D.noShadow();
+    ctx.restore();
+
+    // ── Nom des mariés (bas de photo, centré comme avant) ──
+    let y = photoBottom - 60;
     ctx.save();
     D.shadow("rgba(0,0,0,0.7)", 18);
     D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.06)}px Georgia, serif`, white, "center", W - 120);
@@ -647,11 +656,9 @@ async function genPDF(id) {
     y += 44;
     D.txt("INVITATION ROYALE", CX, y, `${Math.floor(W * 0.022)}px Georgia, serif`, accentL, "center");
 
-    /* ── Section infos — budget restant : H - photoBottom - 90 (marge bas) ── */
-    const remainingSpace = H - photoBottom - 90;
-    y = photoBottom + Math.min(CM * 0.6, remainingSpace * 0.04);
+    /* ── Section infos ── */
+    y = photoBottom + 65;
 
-    // ID billet
     const ticketId = "VIP-INV-" + String(g.id).padStart(3, "0");
     D.rect(CX - 210, y - 36, 420, 58, null, accent, 2, 6);
     D.txt("❖ " + ticketId + " ❖", CX, y, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
@@ -677,7 +684,6 @@ async function genPDF(id) {
     y += 42;
     D.deco(CX, y, 300);
 
-    // Texte invitation (1 ligne courte pour gagner de la place)
     y += 50;
     ctx.save();
     ctx.font = `italic ${Math.floor(W * 0.02)}px Georgia, serif`;
@@ -705,7 +711,7 @@ async function genPDF(id) {
     y += 105;
     D.deco(CX, y, 280);
 
-    // ── Table / Zone / Menu (LIEU SUPPRIMÉ — directement après la date) ──
+    // ── Table / Zone / Menu ──
     y += 75;
     const col1 = CX - 540, col2 = CX, col3 = CX + 540;
 
@@ -724,7 +730,6 @@ async function genPDF(id) {
     D.line(col2 + 240, y - 26, col2 + 240, y + 86, accentD, 2);
     iconBlock("🍽️", "MENU", (g.dt || "STANDARD").toUpperCase(), col3);
 
-    // Espace garanti avant le QR (au moins 1.1cm pour ne pas toucher)
     y += 95;
     y += CM * 1.0;
     D.deco(CX, y, 300);
@@ -762,7 +767,6 @@ async function genPDF(id) {
     D.noShadow();
     ctx.restore();
 
-    // ── Bandeau bas (toujours fixé à H-70, donc jamais de débordement) ──
     D.txt("BILLET NOMINATIF • NON TRANSFÉRABLE", CX, H - 60,
       `${Math.floor(W * 0.015)}px Georgia, serif`, accentD, "center");
 
@@ -776,9 +780,7 @@ async function genPDF(id) {
     return canvas;
   }
 
-  /* ════════════════ PAGE 2 ════════════════
-     Budget vertical total : H = 3307px, marge bas réservée: 60px
-  */
+  /* ════════════════ PAGE 2 ════════════════ */
   async function drawPage2() {
     const canvas = makeCanvas();
     const ctx = canvas.getContext("2d");
@@ -926,7 +928,6 @@ async function genPDF(id) {
     y += qrS + 48;
     D.deco(CX, y, 300, accentD);
 
-    // ── Citation finale (toujours dans le budget, marge bas garantie) ──
     y += 48;
     ctx.save();
     ctx.font = `italic bold ${Math.floor(W * 0.0235)}px Georgia, serif`;
