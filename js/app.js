@@ -80,12 +80,38 @@ function openMod(id)  { $(id).classList.add("open"); }
 function closeMod(id) { $(id).classList.remove("open"); }
 
 function zlbl(z) {
-  var m = {vip:"VIP",famille:"Famille",amis:"Amis",collegues:"Collegues"};
-  return m[z] || z;
+  var m = {
+    vip1: "VIP 1",
+    vip2: "VIP 2",
+    vip3: "VIP 3",
+    vip4: "VIP 4",
+    vip5: "VIP 5",
+
+    france: "FRANCE",
+    espagne: "ESPAGNE",
+    etatsunis: "ÉTATS-UNIS",
+    italie: "ITALIE",
+    turquie: "TURQUIE",
+    chine: "CHINE",
+    allemagne: "ALLEMAGNE",
+    promonova: "PROMONOVA",
+    japon: "JAPON",
+    canada: "CANADA",
+    australie: "AUSTRALIE",
+
+    bresil: "BRÉSIL",
+    maroc: "MAROC",
+    royaumeuni: "ROYAUME-UNI",
+    suisse: "SUISSE",
+    belgique: "BELGIQUE"
+  };
+
+  return m[z] || z.toUpperCase();
 }
+
 function zcls(z) {
-  var m = {vip:"z-vip",famille:"z-famille",amis:"z-amis",collegues:"z-collegues"};
-  return m[z] || "z-amis";
+  if (z.startsWith("vip")) return "z-vip";
+  return "z-amis";
 }
 
 // ── CHARGEMENT SUPABASE ──
