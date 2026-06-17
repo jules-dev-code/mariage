@@ -183,13 +183,11 @@ function openAdmin() {
   $("nav").style.display = "none";
   window.scrollTo(0,0);
   loadGuests();
-  $("photoZone").classList.add("open");
 }
 function closeAdmin() {
   if (scanOn) stopScan();
   $("admin").classList.remove("open");
   $("nav").style.display = "flex";
-  $("photoZone").classList.remove("open");
 }
 
 // ── STATS ──
