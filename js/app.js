@@ -625,7 +625,7 @@ async function genPDF(id) {
 
     // ── Photo — touche le HAUT du cadre (juste après la bordure) ──
     const photoTop = margin1 + 24; // juste à l'intérieur du cadre
-    const photoH = Math.floor(H * 0.56); // grande, comme demandé
+    const photoH = Math.floor(H * 0.52); // grande, mais on libère un peu d'espace pour aérer le bas
     const coupleImg = await loadImage(COUPLE_PHOTO + "?v=" + Date.now());
     ctx.save();
     ctx.beginPath();
@@ -711,10 +711,10 @@ async function genPDF(id) {
     D.noShadow();
     ctx.restore();
 
-    y += 42;
+    y += 50;
     D.deco(CX, y, 300);
 
-    y += 50;
+    y += 58;
     ctx.save();
     ctx.font = `italic ${Math.floor(W * 0.02)}px Georgia, serif`;
     ctx.fillStyle = cream;
@@ -722,11 +722,11 @@ async function genPDF(id) {
     ctx.fillText("Votre présence rendra ce jour inoubliable.", CX, y, W - 160);
     ctx.restore();
 
-    y += 46;
+    y += 60;
     D.deco(CX, y, 280);
 
     // ── Date ──
-    y += 80;
+    y += 105;
     const dateLeftX = CX - 170;
     const dateRightX = CX + 170;
 
@@ -738,11 +738,11 @@ async function genPDF(id) {
     D.txt("DÉCEMBRE", dateRightX, y + 15, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
     D.txt("2026", dateRightX, y + 58, `bold ${Math.floor(W * 0.04)}px Georgia, serif`, accent, "center");
 
-    y += 105;
+    y += 135;
     D.deco(CX, y, 280);
 
     // ── Table / Zone / Menu ──
-    y += 75;
+    y += 95;
     const col1 = CX - 540, col2 = CX, col3 = CX + 540;
 
     function iconBlock(icon, label, value, cx) {
@@ -761,11 +761,11 @@ async function genPDF(id) {
     iconBlock("🍽️", "MENU", (g.dt || "STANDARD").toUpperCase(), col3);
 
     y += 95;
-    y += CM * 1.0;
+    y += CM * 0.85;
     D.deco(CX, y, 300);
 
     // ── QR code ──
-    y += 70;
+    y += 80;
     const qrURL = await makeQR(SITE_URL + "?inv=" + g.id, 400);
     const qrImg = await loadImage(qrURL);
     const qrSize = 300;
