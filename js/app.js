@@ -441,8 +441,9 @@ function groupWA() {
 
 // ── BILLET PDF LUXUEUX ──
 /**
- * genPDF v4 — Invitation Royale 2 pages A5
- * Espacements harmonisés (~1 à 1.15cm = ~160-180px entre sections qui se touchaient)
+ * genPDF v5 — Invitation Royale 2 pages A5
+ * Thème : Orange brûlé foncé + blanc/crème
+ * Page 1 : lieu retiré, photo grande, espacements vérifiés pour ne jamais déborder
  */
 
 async function genPDF(id) {
@@ -450,15 +451,17 @@ async function genPDF(id) {
   if (!g) return;
   notify("Génération du billet...", "inf");
 
-  const gold  = "#C9A84C";
-  const goldL = "#F0CC70";
-  const goldD = "#7A5C1E";
-  const black = "#0D0A04";
-  const white = "#FFFFFF";
-  const cream = "#F5EDD3";
+  // ── PALETTE ORANGE BRÛLÉ ──
+  const accent  = "#E8893A"; // orange brûlé clair (accents/titres)
+  const accentL = "#F5B878"; // orange clair (highlights)
+  const accentD = "#8A3F12"; // orange brûlé très foncé (lignes/bordures discrètes)
+  const bg1     = "#2B1106"; // fond brun-orange très foncé (haut)
+  const bg2     = "#1A0A03"; // fond encore plus foncé (bas)
+  const white   = "#FFFFFF";
+  const cream   = "#FBF1E6";
 
   const W = 2362, H = 3307;
-  const CM = 159; // 1cm en pixels à cette résolution
+  const CM = 159;
 
   function makeCanvas() {
     const c = document.createElement("canvas");
@@ -492,8 +495,11 @@ async function genPDF(id) {
 
   function C(ctx) {
     return {
-      bg(color) {
-        ctx.fillStyle = color;
+      bg(color1, color2) {
+        const g2 = ctx.createLinearGradient(0, 0, 0, H);
+        g2.addColorStop(0, color1);
+        g2.addColorStop(1, color2);
+        ctx.fillStyle = g2;
         ctx.fillRect(0, 0, W, H);
       },
       rect(x, y, w, h, fill, stroke, sw = 3, r = 0) {
@@ -522,7 +528,7 @@ async function genPDF(id) {
         ctx.moveTo(x1, y1); ctx.lineTo(x2, y2);
         ctx.strokeStyle = color; ctx.lineWidth = w; ctx.stroke();
       },
-      deco(cx, y, halfW, color = gold) {
+      deco(cx, y, halfW, color = accent) {
         this.line(cx - halfW, y, cx - 22, y, color, 2);
         this.line(cx + 22, y, cx + halfW, y, color, 2);
         ctx.save();
@@ -546,63 +552,66 @@ async function genPDF(id) {
       corner(x, y, size, fx, fy) {
         ctx.save();
         ctx.translate(x, y); ctx.scale(fx ? -1 : 1, fy ? -1 : 1);
-        ctx.strokeStyle = gold; ctx.lineWidth = 5;
+        ctx.strokeStyle = accent; ctx.lineWidth = 5;
         ctx.beginPath();
         ctx.moveTo(0, size); ctx.lineTo(0, 0); ctx.lineTo(size, 0);
         ctx.stroke();
-        ctx.strokeStyle = goldD; ctx.lineWidth = 2;
+        ctx.strokeStyle = accentD; ctx.lineWidth = 2;
         ctx.beginPath();
         ctx.moveTo(0, size * 0.65); ctx.lineTo(0, size * 0.15);
         ctx.quadraticCurveTo(0, 0, size * 0.15, 0);
         ctx.lineTo(size * 0.65, 0);
         ctx.stroke();
-        ctx.fillStyle = goldL;
+        ctx.fillStyle = accentL;
         ctx.beginPath();
         ctx.arc(size * 0.12, size * 0.12, size * 0.07, 0, Math.PI * 2);
         ctx.fill();
         ctx.restore();
       },
       borders(margin1 = 28, margin2 = 52) {
-        this.rect(margin1, margin1, W - margin1 * 2, H - margin1 * 2, null, gold, 6, 20);
-        this.rect(margin2, margin2, W - margin2 * 2, H - margin2 * 2, null, goldD, 2, 12);
+        this.rect(margin1, margin1, W - margin1 * 2, H - margin1 * 2, null, accent, 6, 20);
+        this.rect(margin2, margin2, W - margin2 * 2, H - margin2 * 2, null, accentD, 2, 12);
       }
     };
   }
 
   const margin1 = 28;
 
-  /* ════════════════ PAGE 1 ════════════════ */
+  /* ════════════════ PAGE 1 ════════════════
+     Budget vertical total : H = 3307px
+     Zone utile (entre bordures) : ~3220px, marge bas réservée: 90px pour le bandeau
+  */
   async function drawPage1() {
     const canvas = makeCanvas();
     const ctx = canvas.getContext("2d");
     const D = C(ctx);
     const CX = W / 2;
 
-    D.bg(black);
+    D.bg(bg1, bg2);
 
-    // ── Couronne + Monogramme VY — AU-DESSUS de la photo (zone propre, pas de chevauchement) ──
-    let y = 95;
+    // ── Couronne + monogramme VY (au-dessus de la photo) ──
+    let y = 90;
     ctx.save();
-    D.shadow(gold, 30);
-    ctx.font = `${Math.floor(W * 0.04)}px serif`;
-    ctx.fillStyle = goldL;
+    D.shadow(accentL, 28);
+    ctx.font = `${Math.floor(W * 0.038)}px serif`;
+    ctx.fillStyle = accentL;
     ctx.textAlign = "center";
     ctx.fillText("♛", CX, y);
     D.noShadow();
     ctx.restore();
 
-    y += CM * 0.85; // ~135px sous la couronne
+    y += 120;
     ctx.save();
-    D.shadow(goldL, 45);
-    ctx.font = `bold ${Math.floor(W * 0.085)}px Georgia, serif`;
-    ctx.fillStyle = gold;
+    D.shadow(accentL, 40);
+    ctx.font = `bold ${Math.floor(W * 0.08)}px Georgia, serif`;
+    ctx.fillStyle = accent;
     ctx.fillText("VY", CX, y);
     D.noShadow();
     ctx.restore();
 
-    // La photo démarre clairement APRÈS le monogramme, avec 1cm de marge
-    const photoTop = y + CM * 0.6;
-    const photoH = Math.floor(H * 0.36);
+    // ── Photo — grande, ~56% de la hauteur totale ──
+    const photoTop = y + 70;
+    const photoH = Math.floor(H * 0.50);
     const coupleImg = await loadImage(COUPLE_PHOTO + "?v=" + Date.now());
     ctx.save();
     ctx.beginPath();
@@ -613,183 +622,149 @@ async function genPDF(id) {
     const pw = coupleImg.width * sc, ph = coupleImg.height * sc;
     ctx.drawImage(coupleImg, (W - pw) / 2, photoTop, pw, ph);
 
-    const halo = ctx.createRadialGradient(CX, photoTop + photoH * 0.3, 0, CX, photoTop + photoH * 0.3, W * 0.55);
-    halo.addColorStop(0,   "rgba(160,80,0,0.45)");
-    halo.addColorStop(0.5, "rgba(80,30,0,0.18)");
+    const halo = ctx.createRadialGradient(CX, photoTop + photoH * 0.3, 0, CX, photoTop + photoH * 0.3, W * 0.6);
+    halo.addColorStop(0,   "rgba(232,137,58,0.35)");
+    halo.addColorStop(0.5, "rgba(138,63,18,0.18)");
     halo.addColorStop(1,   "rgba(0,0,0,0)");
     ctx.fillStyle = halo; ctx.fillRect(0, photoTop, W, photoH);
 
     D.grad(0, photoTop + photoH * 0.55, W, photoH * 0.45, [
-      [0, "rgba(0,0,0,0)"],
-      [0.6, "rgba(5,3,0,0.7)"],
-      [1, "rgba(10,6,0,0.98)"]
+      [0, "rgba(26,10,3,0)"],
+      [0.6, "rgba(26,10,3,0.65)"],
+      [1, "rgba(26,10,3,0.97)"]
     ]);
     ctx.restore();
 
     const photoBottom = photoTop + photoH;
 
-    // Texture subtile sous la photo
+    // ── Nom des mariés (bas de photo) ──
+    y = photoBottom - 60;
     ctx.save();
-    ctx.globalAlpha = 0.03;
-    for (let row = 0; row < 10; row++) {
-      for (let col = 0; col < 8; col++) {
-        ctx.strokeStyle = gold; ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(col * 300 + 150, photoBottom + row * 300 + 150, 80, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
-    ctx.globalAlpha = 1;
-    ctx.restore();
-
-    // ── Nom des mariés (en bas de la photo, sur le dégradé) ──
-    y = photoBottom - 65;
-    ctx.save();
-    D.shadow("rgba(0,0,0,0.8)", 20);
-    D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.062)}px Georgia, serif`, white, "center", W - 120);
+    D.shadow("rgba(0,0,0,0.7)", 18);
+    D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.06)}px Georgia, serif`, white, "center", W - 120);
     D.noShadow();
     ctx.restore();
-    y += 48;
-    D.txt("INVITATION ROYALE", CX, y, `${Math.floor(W * 0.024)}px Georgia, serif`, gold, "center");
+    y += 44;
+    D.txt("INVITATION ROYALE", CX, y, `${Math.floor(W * 0.022)}px Georgia, serif`, accentL, "center");
 
-    // ── Section infos — démarre 1cm après la photo ──
-    y = photoBottom + CM * 0.9;
+    /* ── Section infos — budget restant : H - photoBottom - 90 (marge bas) ── */
+    const remainingSpace = H - photoBottom - 90;
+    y = photoBottom + Math.min(CM * 0.6, remainingSpace * 0.04);
 
+    // ID billet
     const ticketId = "VIP-INV-" + String(g.id).padStart(3, "0");
-    D.rect(CX - 220, y - 38, 440, 62, null, gold, 2, 6);
-    D.txt("❖ " + ticketId + " ❖", CX, y, `${Math.floor(W * 0.022)}px Georgia, serif`, gold, "center");
+    D.rect(CX - 210, y - 36, 420, 58, null, accent, 2, 6);
+    D.txt("❖ " + ticketId + " ❖", CX, y, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
 
-    y += CM * 0.55;
-    D.txt("INVITÉ D'HONNEUR", CX, y, `bold ${Math.floor(W * 0.023)}px Georgia, serif`, gold, "center");
-    y += 26;
-    D.deco(CX, y, 320);
+    y += 70;
+    D.txt("INVITÉ D'HONNEUR", CX, y, `bold ${Math.floor(W * 0.021)}px Georgia, serif`, accentL, "center");
+    y += 24;
+    D.deco(CX, y, 300);
 
-    y += CM * 0.45;
+    y += 58;
     const guestName = ((g.ti || "") + " " + g.fn + " " + g.ln).trim().toUpperCase();
     ctx.save();
-    D.shadow(gold, 12);
-    let nameFont = Math.floor(W * 0.05);
+    D.shadow(accent, 10);
+    let nameFont = Math.floor(W * 0.044);
     ctx.font = `bold ${nameFont}px Georgia, serif`;
     if (ctx.measureText(guestName).width > W - 160) {
-      nameFont = Math.floor(W * 0.038);
+      nameFont = Math.floor(W * 0.034);
     }
     D.txt(guestName, CX, y, `bold ${nameFont}px Georgia, serif`, white, "center", W - 140);
     D.noShadow();
     ctx.restore();
 
-    y += 48;
-    D.deco(CX, y, 320);
+    y += 42;
+    D.deco(CX, y, 300);
 
-    // Texte invitation
-    y += CM * 0.5;
+    // Texte invitation (1 ligne courte pour gagner de la place)
+    y += 50;
     ctx.save();
-    ctx.font = `italic ${Math.floor(W * 0.0225)}px Georgia, serif`;
+    ctx.font = `italic ${Math.floor(W * 0.02)}px Georgia, serif`;
     ctx.fillStyle = cream;
     ctx.textAlign = "center";
-    const lines = [
-      "C'est avec un immense bonheur que nous vous",
-      "invitons à être témoins de notre promesse de mariage."
-    ];
-    lines.forEach((l, i) => ctx.fillText(l, CX, y + i * 44, W - 160));
+    ctx.fillText("Votre présence rendra ce jour inoubliable.", CX, y, W - 160);
     ctx.restore();
-    y += lines.length * 44 + 10;
 
-    y += CM * 0.4;
-    D.deco(CX, y, 300);
+    y += 46;
+    D.deco(CX, y, 280);
 
     // ── Date ──
-    y += CM * 0.6;
-    const dateLeftX = CX - 180;
-    const dateRightX = CX + 180;
-
-    D.txt("SAMEDI", dateLeftX, y, `${Math.floor(W * 0.0225)}px Georgia, serif`, gold, "center");
-    D.txt("27", dateLeftX, y + 88, `bold ${Math.floor(W * 0.085)}px Georgia, serif`, gold, "center");
-
-    D.line(CX, y - 15, CX, y + 95, goldD, 2);
-
-    D.txt("DÉCEMBRE", dateRightX, y + 18, `${Math.floor(W * 0.0225)}px Georgia, serif`, gold, "center");
-    D.txt("2026", dateRightX, y + 70, `bold ${Math.floor(W * 0.047)}px Georgia, serif`, gold, "center");
-
-    y += 130;
-    y += CM * 0.4;
-    D.deco(CX, y, 300);
-
-    // ── Lieu ──
-    y += CM * 0.55;
-    ctx.save();
-    ctx.font = `${Math.floor(W * 0.034)}px serif`;
-    ctx.fillStyle = gold;
-    ctx.textAlign = "left";
-    ctx.fillText("📍", 130, y);
-    ctx.restore();
-    D.txt("LIEU DE LA CÉRÉMONIE", 215, y - 20, `bold ${Math.floor(W * 0.0225)}px Georgia, serif`, gold, "left");
-    D.txt("Nyom Messassi, 600 Lots", 215, y + 16, `${Math.floor(W * 0.0205)}px Georgia, serif`, cream, "left");
-    D.txt("Yaoundé, Cameroun", 215, y + 50, `${Math.floor(W * 0.0205)}px Georgia, serif`, cream, "left");
-
     y += 80;
-    y += CM * 0.4;
-    D.deco(CX, y, 300);
+    const dateLeftX = CX - 170;
+    const dateRightX = CX + 170;
 
-    // ── Table / Zone / Menu ──
-    y += CM * 0.6;
-    const col1 = CX - 560, col2 = CX, col3 = CX + 560;
+    D.txt("SAMEDI", dateLeftX, y, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
+    D.txt("27", dateLeftX, y + 75, `bold ${Math.floor(W * 0.07)}px Georgia, serif`, accent, "center");
+
+    D.line(CX, y - 12, CX, y + 80, accentD, 2);
+
+    D.txt("DÉCEMBRE", dateRightX, y + 15, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
+    D.txt("2026", dateRightX, y + 58, `bold ${Math.floor(W * 0.04)}px Georgia, serif`, accent, "center");
+
+    y += 105;
+    D.deco(CX, y, 280);
+
+    // ── Table / Zone / Menu (LIEU SUPPRIMÉ — directement après la date) ──
+    y += 75;
+    const col1 = CX - 540, col2 = CX, col3 = CX + 540;
 
     function iconBlock(icon, label, value, cx) {
       ctx.save();
-      ctx.font = `${Math.floor(W * 0.036)}px serif`;
-      ctx.fillStyle = gold; ctx.textAlign = "center";
+      ctx.font = `${Math.floor(W * 0.032)}px serif`;
+      ctx.fillStyle = accent; ctx.textAlign = "center";
       ctx.fillText(icon, cx, y);
       ctx.restore();
-      D.txt(label, cx, y + 46, `${Math.floor(W * 0.019)}px Georgia, serif`, cream, "center");
-      D.txt(value, cx, y + 90, `bold ${Math.floor(W * 0.032)}px Georgia, serif`, gold, "center", 340);
+      D.txt(label, cx, y + 42, `${Math.floor(W * 0.017)}px Georgia, serif`, cream, "center");
+      D.txt(value, cx, y + 82, `bold ${Math.floor(W * 0.028)}px Georgia, serif`, accent, "center", 330);
     }
     iconBlock("🪑", "TABLE", String(g.tb || "01").padStart(2, "0"), col1);
-    D.line(col1 + 250, y - 28, col1 + 250, y + 95, goldD, 2);
+    D.line(col1 + 240, y - 26, col1 + 240, y + 86, accentD, 2);
     iconBlock("👥", "ZONE", zlbl(g.zn).toUpperCase(), col2);
-    D.line(col2 + 250, y - 28, col2 + 250, y + 95, goldD, 2);
+    D.line(col2 + 240, y - 26, col2 + 240, y + 86, accentD, 2);
     iconBlock("🍽️", "MENU", (g.dt || "STANDARD").toUpperCase(), col3);
 
-    // Espace garanti 1.15cm avant la ligne déco + le cadre QR (c'était le souci signalé)
+    // Espace garanti avant le QR (au moins 1.1cm pour ne pas toucher)
     y += 95;
-    y += CM * 1.15;
-    D.deco(CX, y, 320);
+    y += CM * 1.0;
+    D.deco(CX, y, 300);
 
-    // ── QR code — avec marge de sécurité par rapport à la couronne au-dessus ──
-    y += CM * 0.55;
+    // ── QR code ──
+    y += 70;
     const qrURL = await makeQR(SITE_URL + "?inv=" + g.id, 400);
     const qrImg = await loadImage(qrURL);
-    const qrSize = 320;
+    const qrSize = 300;
     const qrX = CX - qrSize / 2;
 
-    D.rect(qrX - 26, y - 42, qrSize + 52, qrSize + 92, "rgba(20,14,2,0.85)", gold, 4, 16);
+    D.rect(qrX - 24, y - 38, qrSize + 48, qrSize + 84, "rgba(20,8,2,0.85)", accent, 4, 16);
     ctx.save();
-    ctx.font = `${Math.floor(W * 0.032)}px serif`;
-    ctx.fillStyle = goldL; ctx.textAlign = "center";
-    D.shadow(gold, 14);
-    ctx.fillText("♛", CX, y - 10);
+    ctx.font = `${Math.floor(W * 0.028)}px serif`;
+    ctx.fillStyle = accentL; ctx.textAlign = "center";
+    D.shadow(accent, 12);
+    ctx.fillText("♛", CX, y - 8);
     D.noShadow();
     ctx.restore();
     ctx.drawImage(qrImg, qrX, y, qrSize, qrSize);
 
-    y += qrSize + 48;
+    y += qrSize + 44;
     D.txt("SCANNEZ POUR CONFIRMER VOTRE PRÉSENCE", CX, y,
-      `${Math.floor(W * 0.017)}px Georgia, serif`, goldD, "center");
+      `${Math.floor(W * 0.015)}px Georgia, serif`, accentD, "center");
 
     // ── Citation ──
-    y += CM * 0.55;
-    D.deco(CX, y, 280);
-    y += CM * 0.45;
+    y += 55;
+    D.deco(CX, y, 260);
+    y += 48;
     ctx.save();
-    ctx.font = `italic bold ${Math.floor(W * 0.028)}px Georgia, serif`;
-    ctx.fillStyle = gold; ctx.textAlign = "center";
-    D.shadow(gold, 8);
+    ctx.font = `italic bold ${Math.floor(W * 0.024)}px Georgia, serif`;
+    ctx.fillStyle = accent; ctx.textAlign = "center";
+    D.shadow(accent, 6);
     ctx.fillText("L'amour unit nos cœurs, la foi guide nos pas.", CX, y, W - 140);
     D.noShadow();
     ctx.restore();
 
-    // ── Bandeau bas ──
-    D.txt("BILLET NOMINATIF • NON TRANSFÉRABLE", CX, H - 70,
-      `${Math.floor(W * 0.016)}px Georgia, serif`, goldD, "center");
+    // ── Bandeau bas (toujours fixé à H-70, donc jamais de débordement) ──
+    D.txt("BILLET NOMINATIF • NON TRANSFÉRABLE", CX, H - 60,
+      `${Math.floor(W * 0.015)}px Georgia, serif`, accentD, "center");
 
     D.borders(margin1, 52);
     const cs = 120;
@@ -801,60 +776,47 @@ async function genPDF(id) {
     return canvas;
   }
 
-  /* ════════════════ PAGE 2 ════════════════ */
+  /* ════════════════ PAGE 2 ════════════════
+     Budget vertical total : H = 3307px, marge bas réservée: 60px
+  */
   async function drawPage2() {
     const canvas = makeCanvas();
     const ctx = canvas.getContext("2d");
     const D = C(ctx);
     const CX = W / 2;
 
-    D.bg(black);
+    D.bg(bg1, bg2);
 
+    let y = 80;
     ctx.save();
-    ctx.globalAlpha = 0.03;
-    for (let row = 0; row < 14; row++) {
-      for (let col = 0; col < 9; col++) {
-        ctx.strokeStyle = gold; ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.arc(col * 280 + 140, row * 280 + 140, 70, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-    }
-    ctx.globalAlpha = 1;
-    ctx.restore();
-
-    let y = 85;
-    ctx.save();
-    ctx.font = `${Math.floor(W * 0.036)}px serif`;
-    ctx.fillStyle = goldL; ctx.textAlign = "center";
-    D.shadow(gold, 16);
+    ctx.font = `${Math.floor(W * 0.034)}px serif`;
+    ctx.fillStyle = accentL; ctx.textAlign = "center";
+    D.shadow(accent, 14);
     ctx.fillText("♛", CX, y);
     D.noShadow();
     ctx.restore();
 
-    // Espace garanti 1.15cm entre couronne et VY (c'était trop serré avant)
-    y += CM * 1.15;
+    y += 120;
     ctx.save();
-    D.shadow(gold, 32);
-    ctx.font = `bold ${Math.floor(W * 0.09)}px Georgia, serif`;
-    ctx.fillStyle = gold; ctx.textAlign = "center";
+    D.shadow(accent, 28);
+    ctx.font = `bold ${Math.floor(W * 0.078)}px Georgia, serif`;
+    ctx.fillStyle = accent; ctx.textAlign = "center";
     ctx.fillText("VY", CX, y);
     D.noShadow();
     ctx.restore();
 
-    // Espace garanti 1cm entre VY et VANINA & YVAN (c'était le souci signalé)
-    y += CM * 0.5;
-    D.deco(CX, y, 380);
-    y += CM * 0.65;
-    D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.047)}px Georgia, serif`, gold, "center");
-    y += 28;
-    D.deco(CX, y, 420);
-
-    y += CM * 0.55;
-    D.txt("PROGRAMME DU MARIAGE", CX, y,
-      `${Math.floor(W * 0.032)}px Georgia, serif`, white, "center");
+    y += 55;
+    D.deco(CX, y, 360);
+    y += 60;
+    D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.042)}px Georgia, serif`, accent, "center");
     y += 26;
-    D.deco(CX, y, 450, goldD);
+    D.deco(CX, y, 400);
+
+    y += 55;
+    D.txt("PROGRAMME DU MARIAGE", CX, y,
+      `${Math.floor(W * 0.029)}px Georgia, serif`, white, "center");
+    y += 24;
+    D.deco(CX, y, 430, accentD);
 
     const programme = [
       { heure: "14h00", titre: "Accueil des Invités",    detail: "Installation et rafraîchissements",  icon: "👥" },
@@ -867,70 +829,68 @@ async function genPDF(id) {
       { heure: "00h00", titre: "Clôture Officielle",      detail: "Fin de cette journée inoubliable",    icon: "🎆" },
     ];
 
-    y += CM * 0.5;
+    y += 45;
     const progStartY = y;
-    const rowH = 132;
-    const lineX = 300;
+    const rowH = 122;
+    const lineX = 290;
 
-    D.line(lineX, progStartY, lineX, progStartY + programme.length * rowH - 30, goldD, 3);
+    D.line(lineX, progStartY, lineX, progStartY + programme.length * rowH - 28, accentD, 3);
 
     programme.forEach((item, i) => {
-      const py = progStartY + i * rowH + 48;
-      D.rect(lineX - 30, py - 30, 60, 60, black, gold, 3, 30);
+      const py = progStartY + i * rowH + 44;
+      D.rect(lineX - 28, py - 28, 56, 56, bg2, accent, 3, 28);
       ctx.save();
-      ctx.font = `${Math.floor(W * 0.022)}px serif`;
-      ctx.fillStyle = gold; ctx.textAlign = "center";
-      ctx.fillText(item.icon, lineX, py + 8);
+      ctx.font = `${Math.floor(W * 0.02)}px serif`;
+      ctx.fillStyle = accent; ctx.textAlign = "center";
+      ctx.fillText(item.icon, lineX, py + 7);
       ctx.restore();
 
-      D.txt(item.heure, lineX - 52, py + 6,
-        `bold ${Math.floor(W * 0.026)}px Georgia, serif`, gold, "right");
+      D.txt(item.heure, lineX - 48, py + 6,
+        `bold ${Math.floor(W * 0.024)}px Georgia, serif`, accent, "right");
 
-      D.txt(item.titre.toUpperCase(), lineX + 55, py - 8,
-        `bold ${Math.floor(W * 0.024)}px Georgia, serif`, gold, "left", W - lineX - 105);
-      D.txt(item.detail, lineX + 55, py + 30,
-        `italic ${Math.floor(W * 0.0185)}px Georgia, serif`, cream, "left", W - lineX - 105);
+      D.txt(item.titre.toUpperCase(), lineX + 50, py - 8,
+        `bold ${Math.floor(W * 0.022)}px Georgia, serif`, accent, "left", W - lineX - 100);
+      D.txt(item.detail, lineX + 50, py + 28,
+        `italic ${Math.floor(W * 0.017)}px Georgia, serif`, cream, "left", W - lineX - 100);
     });
 
-    y = progStartY + programme.length * rowH + 20;
-    y += CM * 0.3;
-    D.deco(CX, y, 430, goldD);
+    y = progStartY + programme.length * rowH + 15;
+    D.deco(CX, y, 410, accentD);
 
     // ── Code vestimentaire ──
-    y += CM * 0.55;
+    y += 50;
     D.txt("Code Vestimentaire", CX, y,
-      `italic bold ${Math.floor(W * 0.028)}px Georgia, serif`, gold, "center");
-    y += 28;
-    D.deco(CX, y, 350, goldD);
+      `italic bold ${Math.floor(W * 0.026)}px Georgia, serif`, accent, "center");
+    y += 25;
+    D.deco(CX, y, 330, accentD);
 
-    y += CM * 0.7;
+    y += 65;
     ctx.save();
-    ctx.font = `${Math.floor(W * 0.055)}px serif`;
-    ctx.fillStyle = gold; ctx.textAlign = "center";
-    ctx.fillText("🤵", CX - 420, y);
-    ctx.fillText("👗", CX + 420, y);
+    ctx.font = `${Math.floor(W * 0.05)}px serif`;
+    ctx.fillStyle = accent; ctx.textAlign = "center";
+    ctx.fillText("🤵", CX - 400, y);
+    ctx.fillText("👗", CX + 400, y);
     ctx.restore();
 
-    D.line(CX, y - 55, CX, y + 120, goldD, 2);
+    D.line(CX, y - 50, CX, y + 110, accentD, 2);
 
-    D.txt("HOMMES", CX - 420, y + 55, `bold ${Math.floor(W * 0.02)}px Georgia, serif`, gold, "center");
-    D.txt("Costume sombre recommandé", CX - 420, y + 88, `${Math.floor(W * 0.0165)}px Georgia, serif`, cream, "center", 320);
+    D.txt("HOMMES", CX - 400, y + 50, `bold ${Math.floor(W * 0.019)}px Georgia, serif`, accent, "center");
+    D.txt("Costume sombre recommandé", CX - 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
 
-    D.txt("FEMMES", CX + 420, y + 55, `bold ${Math.floor(W * 0.02)}px Georgia, serif`, gold, "center");
-    D.txt("Tenue de soirée élégante", CX + 420, y + 88, `${Math.floor(W * 0.0165)}px Georgia, serif`, cream, "center", 320);
+    D.txt("FEMMES", CX + 400, y + 50, `bold ${Math.floor(W * 0.019)}px Georgia, serif`, accent, "center");
+    D.txt("Tenue de soirée élégante", CX + 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
 
-    y += 145;
-    y += CM * 0.35;
-    D.deco(CX, y, 380, goldD);
+    y += 130;
+    D.deco(CX, y, 360, accentD);
 
     // ── Infos utiles ──
-    y += CM * 0.55;
+    y += 50;
     D.txt("Informations Utiles", CX, y,
-      `italic bold ${Math.floor(W * 0.028)}px Georgia, serif`, gold, "center");
-    y += 28;
-    D.deco(CX, y, 350, goldD);
+      `italic bold ${Math.floor(W * 0.026)}px Georgia, serif`, accent, "center");
+    y += 25;
+    D.deco(CX, y, 330, accentD);
 
-    y += CM * 0.55;
+    y += 55;
     const infoItems = [
       { icon: "📍", lines: ["Nyom Messassi, 600 Lots", "Yaoundé, Cameroun"] },
       { icon: "📞", lines: ["+237 6 12 34 56 78", "+237 6 98 76 54 32"] },
@@ -939,41 +899,39 @@ async function genPDF(id) {
 
     infoItems.forEach(item => {
       ctx.save();
-      ctx.font = `${Math.floor(W * 0.03)}px serif`;
-      ctx.fillStyle = gold; ctx.textAlign = "left";
-      ctx.fillText(item.icon, 150, y + 8);
+      ctx.font = `${Math.floor(W * 0.028)}px serif`;
+      ctx.fillStyle = accent; ctx.textAlign = "left";
+      ctx.fillText(item.icon, 150, y + 6);
       ctx.restore();
       item.lines.forEach((l, li) => {
-        D.txt(l, 250, y + li * 40, `${Math.floor(W * 0.0205)}px Georgia, serif`, cream, "left");
+        D.txt(l, 248, y + li * 38, `${Math.floor(W * 0.019)}px Georgia, serif`, cream, "left");
       });
-      y += item.lines.length * 40 + 32;
+      y += item.lines.length * 38 + 28;
     });
 
-    y += CM * 0.3;
-    D.deco(CX, y, 380, goldD);
+    D.deco(CX, y, 360, accentD);
 
     // ── QR localisation ──
-    y += CM * 0.5;
+    y += 55;
     const qrLocURL = await makeQR("https://maps.google.com/?q=Nyom+Messassi+Yaounde+Cameroun", 400);
     const qrLocImg = await loadImage(qrLocURL);
-    const qrS = 290;
+    const qrS = 270;
     const qrLX = CX - qrS / 2;
 
-    D.rect(qrLX - 26, y - 38, qrS + 52, qrS + 88, "rgba(20,14,2,0.85)", gold, 4, 16);
+    D.rect(qrLX - 24, y - 36, qrS + 48, qrS + 82, "rgba(20,8,2,0.85)", accent, 4, 16);
     D.txt("SCANNEZ POUR LOCALISER LE LIEU", CX, y - 8,
-      `${Math.floor(W * 0.017)}px Georgia, serif`, goldD, "center");
+      `${Math.floor(W * 0.0155)}px Georgia, serif`, accentD, "center");
     ctx.drawImage(qrLocImg, qrLX, y, qrS, qrS);
 
-    y += qrS + 50;
-    y += CM * 0.3;
-    D.deco(CX, y, 320, goldD);
+    y += qrS + 48;
+    D.deco(CX, y, 300, accentD);
 
-    // ── Citation finale ──
-    y += CM * 0.5;
+    // ── Citation finale (toujours dans le budget, marge bas garantie) ──
+    y += 48;
     ctx.save();
-    ctx.font = `italic bold ${Math.floor(W * 0.026)}px Georgia, serif`;
-    ctx.fillStyle = gold; ctx.textAlign = "center";
-    D.shadow(gold, 8);
+    ctx.font = `italic bold ${Math.floor(W * 0.0235)}px Georgia, serif`;
+    ctx.fillStyle = accent; ctx.textAlign = "center";
+    D.shadow(accent, 6);
     ctx.fillText("Merci de partager avec nous ce moment unique.", CX, y, W - 140);
     D.noShadow();
     ctx.restore();
