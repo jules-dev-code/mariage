@@ -478,6 +478,12 @@ function groupWA() {
  * Page 1 : photo touche le haut du cadre, monogramme VY en overlay décalé à gauche
  */
 
+// ── BILLET PDF LUXUEUX ──
+/**
+ * genPDF v6 — Invitation Royale 2 pages A5
+ * Page 1 : photo touche le haut du cadre, monogramme VY en overlay décalé à gauche
+ */
+
 async function genPDF(id) {
   const g = guests.find(x => x.id === id);
   if (!g) return;
@@ -628,10 +634,8 @@ async function genPDF(id) {
 
     const sc = Math.max(W / coupleImg.width, photoH / coupleImg.height);
     const pw = coupleImg.width * sc, ph = coupleImg.height * sc;
-    // On décale légèrement l'image vers la droite pour que les visages
-    // restent visibles à droite, laissant la gauche pour le monogramme
-    const photoOffsetX = (W - pw) / 2 + W * 0.05;
-    ctx.drawImage(coupleImg, photoOffsetX, photoTop, pw, ph);
+    // Image centrée, pleine largeur (de bord à bord)
+    ctx.drawImage(coupleImg, (W - pw) / 2, photoTop, pw, ph);
 
     const halo = ctx.createRadialGradient(CX, photoTop + photoH * 0.3, 0, CX, photoTop + photoH * 0.3, W * 0.6);
     halo.addColorStop(0,   "rgba(232,137,58,0.3)");
@@ -782,18 +786,19 @@ async function genPDF(id) {
       `${Math.floor(W * 0.015)}px Georgia, serif`, accentD, "center");
 
     // ── Citation ──
-    y += 55;
+    y += 45;
     D.deco(CX, y, 260);
-    y += 48;
+    y += 40;
     ctx.save();
-    ctx.font = `italic bold ${Math.floor(W * 0.024)}px Georgia, serif`;
+    ctx.font = `italic bold ${Math.floor(W * 0.022)}px Georgia, serif`;
     ctx.fillStyle = accent; ctx.textAlign = "center";
     D.shadow(accent, 6);
     ctx.fillText("L'amour unit nos cœurs, la foi guide nos pas.", CX, y, W - 140);
     D.noShadow();
     ctx.restore();
 
-    D.txt("BILLET NOMINATIF • NON TRANSFÉRABLE", CX, H - 60,
+    y += 55;
+    D.txt("BILLET NOMINATIF • NON TRANSFÉRABLE", CX, y,
       `${Math.floor(W * 0.015)}px Georgia, serif`, accentD, "center");
 
     D.borders(margin1, 52);
