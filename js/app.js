@@ -123,7 +123,10 @@ async function loadGuests() {
       await seedGuests();
       guests = await DB.select();
     }
-    nextNum = guests.length + 1;
+nextNum = guests.reduce(function(max, g) {
+  var num = parseInt(g.id.replace("INV-", ""), 10);
+  return isNaN(num) ? max : Math.max(max, num);
+}, 0) + 1;
     updateStats();
     renderList();
     renderAlpha();
@@ -698,7 +701,7 @@ async function genPDF(id) {
     y += 24;
     D.deco(CX, y, 300);
 
-    y += 85;
+    y += 95;
     const guestName = ((g.ti || "") + " " + g.fn + " " + g.ln).trim().toUpperCase();
     ctx.save();
     D.shadow(accent, 10);
@@ -840,7 +843,7 @@ async function genPDF(id) {
 
     y += 55;
     D.deco(CX, y, 360);
-    y += 70;
+    y += 80;
     D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.042)}px Georgia, serif`, accent, "center");
     y += 26;
     D.deco(CX, y, 400);
