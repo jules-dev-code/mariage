@@ -698,7 +698,7 @@ async function genPDF(id) {
     y += 24;
     D.deco(CX, y, 300);
 
-    y += 80;
+    y += 85;
     const guestName = ((g.ti || "") + " " + g.fn + " " + g.ln).trim().toUpperCase();
     ctx.save();
     D.shadow(accent, 10);
@@ -735,7 +735,7 @@ async function genPDF(id) {
 
     D.line(CX, y - 12, CX, y + 80, accentD, 2);
 
-    D.txt("DÉCEMBRE", dateRightX, y + 15, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
+    D.txt("JUIN", dateRightX, y + 15, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
     D.txt("2026", dateRightX, y + 75, `bold ${Math.floor(W * 0.04)}px Georgia, serif`, accent, "center");
 
     y += 135;
@@ -840,7 +840,7 @@ async function genPDF(id) {
 
     y += 55;
     D.deco(CX, y, 360);
-    y += 60;
+    y += 70;
     D.txt("VANINA & YVAN", CX, y, `bold ${Math.floor(W * 0.042)}px Georgia, serif`, accent, "center");
     y += 26;
     D.deco(CX, y, 400);
@@ -908,10 +908,10 @@ async function genPDF(id) {
     D.line(CX, y - 50, CX, y + 110, accentD, 2);
 
     D.txt("HOMMES", CX - 400, y + 50, `bold ${Math.floor(W * 0.019)}px Georgia, serif`, accent, "center");
-    D.txt("Costume sombre recommandé", CX - 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
+    D.txt("Costume orange brûler recommandé", CX - 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
 
     D.txt("FEMMES", CX + 400, y + 50, `bold ${Math.floor(W * 0.019)}px Georgia, serif`, accent, "center");
-    D.txt("Tenue de soirée élégante", CX + 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
+    D.txt("Tenue de soirée élégante du thème", CX + 400, y + 80, `${Math.floor(W * 0.015)}px Georgia, serif`, cream, "center", 300);
 
     y += 130;
     D.deco(CX, y, 360, accentD);
@@ -926,7 +926,7 @@ async function genPDF(id) {
     y += 55;
     const infoItems = [
       { icon: "📍", lines: ["Nyom Messassi, 600 Lots", "Yaoundé, Cameroun"] },
-      { icon: "📞", lines: ["+237 6 12 34 56 78", "+237 6 98 76 54 32"] },
+      { icon: "📞", lines: ["+237 6 78 99 56 17", "+237 6 56 04 70 97"] },
       { icon: "✉️", lines: ["beugueum@gmail.com"] },
     ];
 
