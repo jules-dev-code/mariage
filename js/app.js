@@ -698,7 +698,7 @@ async function genPDF(id) {
     y += 24;
     D.deco(CX, y, 300);
 
-    y += 58;
+    y += 80;
     const guestName = ((g.ti || "") + " " + g.fn + " " + g.ln).trim().toUpperCase();
     ctx.save();
     D.shadow(accent, 10);
@@ -731,12 +731,12 @@ async function genPDF(id) {
     const dateRightX = CX + 170;
 
     D.txt("SAMEDI", dateLeftX, y, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
-    D.txt("27", dateLeftX, y + 75, `bold ${Math.floor(W * 0.07)}px Georgia, serif`, accent, "center");
+    D.txt("27", dateLeftX, y + 95, `bold ${Math.floor(W * 0.07)}px Georgia, serif`, accent, "center");
 
     D.line(CX, y - 12, CX, y + 80, accentD, 2);
 
     D.txt("DÉCEMBRE", dateRightX, y + 15, `${Math.floor(W * 0.02)}px Georgia, serif`, accentL, "center");
-    D.txt("2026", dateRightX, y + 58, `bold ${Math.floor(W * 0.04)}px Georgia, serif`, accent, "center");
+    D.txt("2026", dateRightX, y + 75, `bold ${Math.floor(W * 0.04)}px Georgia, serif`, accent, "center");
 
     y += 135;
     D.deco(CX, y, 280);
@@ -752,7 +752,7 @@ async function genPDF(id) {
       ctx.fillText(icon, cx, y);
       ctx.restore();
       D.txt(label, cx, y + 42, `${Math.floor(W * 0.017)}px Georgia, serif`, cream, "center");
-      D.txt(value, cx, y + 95, `bold ${Math.floor(W * 0.028)}px Georgia, serif`, accent, "center", 330);
+      D.txt(value, cx, y + 98, `bold ${Math.floor(W * 0.028)}px Georgia, serif`, accent, "center", 330);
     }
     iconBlock("🪑", "TABLE", String(g.tb || "01").padStart(2, "0"), col1);
     D.line(col1 + 240, y - 26, col1 + 240, y + 86, accentD, 2);
@@ -761,7 +761,7 @@ async function genPDF(id) {
     iconBlock("🍽️", "MENU", (g.dt || "STANDARD").toUpperCase(), col3);
 
     y += 95;
-    y += CM * 0.85;
+    y += CM * 0.5;
     D.deco(CX, y, 300);
 
     // ── QR code ──
