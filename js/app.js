@@ -1081,195 +1081,33 @@ function exportCSV() {
 
 // ── IMPRESSION ──
 function printList() {
+  var sorted = guests.slice().sort(function(a,b){
 
-var sorted = guests.slice().sort(function(a,b){
+  var ta = parseInt(a.tb) || 0;
+  var tb = parseInt(b.tb) || 0;
 
-```
-var ta = parseInt(a.tb) || 0;
-var tb = parseInt(b.tb) || 0;
-
-if(ta !== tb){
-  return ta - tb;
-}
-
-return (a.ln + a.fn).localeCompare(b.ln + b.fn);
-```
-
-});
-
-var totalGuests = sorted.length;
-var totalArrived = sorted.filter(function(g){
-return g.ar;
-}).length;
-
-var html = '';
-
-var currentTable = null;
-var countTable = 0;
-
-sorted.forEach(function(g, index){
-
-```
-if(currentTable !== g.tb){
-
-  if(currentTable !== null){
-    html += '</tbody></table><br>';
+  if (ta !== tb) {
+    return ta - tb;
   }
-
-  countTable = sorted.filter(function(x){
-    return x.tb == g.tb;
-  }).length;
-
-  html +=
-    '<div class="table-title">' +
-    'TABLE ' + g.tb +
-    ' <span>(' + countTable + ' personne' +
-    (countTable > 1 ? 's' : '') +
-    ')</span>' +
-    '</div>';
-
-  html +=
-    '<table>' +
-    '<thead>' +
-    '<tr>' +
-    '<th>Nom</th>' +
-    '<th>Zone</th>' +
-    '<th>Téléphone</th>' +
-    '<th>Statut</th>' +
-    '</tr>' +
-    '</thead>' +
-    '<tbody>';
-
-  currentTable = g.tb;
+  return a.ln.localeCompare(b.ln);});
+  var arr = guests.filter(function(g){ return g.ar; }).length;
+  var w = window.open("","_blank");
+  var rows = sorted.map(function(g){
+    return "<tr><td><strong>"+g.ti+" "+g.fn+" "+g.ln+"</strong></td><td>"+g.tb+"</td><td>"+zlbl(g.zn)+"</td><td>"+(g.phone||"—")+"</td><td class='"+( g.ar?"ok":"wait")+"'>"+(g.ar?"Arrive":"En attente")+"</td><td>"+(g.at||"—")+"</td></tr>";
+  }).join("");
+  w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Liste — '+COUPLE+'</title>'+
+    '<style>body{font-family:Georgia,serif;max-width:900px;margin:40px auto;color:#1A0E00}'+
+    'h1{color:#CC5500;text-align:center}table{width:100%;border-collapse:collapse;font-size:.85rem}'+
+    'th{color:#CC5500;padding:10px 8px;border-bottom:2px solid #CC5500;text-align:left}'+
+    'td{padding:9px 8px;border-bottom:1px solid #F0E8DE}.ok{color:#4A7C59;font-weight:bold}.wait{color:#999}'+
+    '@media print{button{display:none}}</style></head><body>'+
+    '<h1>'+COUPLE+'</h1>'+
+    '<table><thead><tr><th>Nom</th><th>Table</th><th>Zone</th><th>Tel</th><th>Statut</th><th>Heure</th></tr></thead>'+
+    '<tbody>'+rows+'</tbody></table>'+
+    '<script>window.onload=function(){window.print();}<\/script></body></html>');
+  w.document.close();
+  notify("Impression lancee","inf");
 }
-
-html +=
-  '<tr>' +
-  '<td><strong>' +
-  g.ti + ' ' + g.fn + ' ' + g.ln +
-  '</strong></td>' +
-  '<td>' + zlbl(g.zn) + '</td>' +
-  '<td>' + (g.phone || '—') + '</td>' +
-  '<td class="' + (g.ar ? 'ok' : 'wait') + '">' +
-  (g.ar ? 'Arrivé' : 'En attente') +
-  '</td>' +
-  '</tr>';
-```
-
-});
-
-html += '</tbody></table>';
-
-var w = window.open("", "_blank");
-
-w.document.write(
-'<!DOCTYPE html>' +
-'<html>' +
-'<head>' +
-'<meta charset="UTF-8">' +
-'<title>Liste Invités</title>' +
-'<style>' +
-
-```
-'body{' +
-'font-family:Georgia,serif;' +
-'max-width:1000px;' +
-'margin:30px auto;' +
-'padding:20px;' +
-'color:#1A0E00;' +
-'}' +
-
-'h1{' +
-'text-align:center;' +
-'color:#CC5500;' +
-'margin-bottom:5px;' +
-'}' +
-
-'.summary{' +
-'text-align:center;' +
-'margin-bottom:30px;' +
-'font-size:14px;' +
-'}' +
-
-'.table-title{' +
-'background:#1A0E00;' +
-'color:#D4820A;' +
-'padding:12px 15px;' +
-'font-size:18px;' +
-'font-weight:bold;' +
-'margin-top:20px;' +
-'border-left:5px solid #CC5500;' +
-'}' +
-
-'.table-title span{' +
-'font-size:13px;' +
-'color:#FFF;' +
-'margin-left:10px;' +
-'}' +
-
-'table{' +
-'width:100%;' +
-'border-collapse:collapse;' +
-'margin-bottom:20px;' +
-'}' +
-
-'th{' +
-'background:#F8F4EC;' +
-'color:#CC5500;' +
-'padding:10px;' +
-'text-align:left;' +
-'border-bottom:2px solid #CC5500;' +
-'}' +
-
-'td{' +
-'padding:10px;' +
-'border-bottom:1px solid #E5DED4;' +
-'}' +
-
-'.ok{' +
-'color:#2E8B57;' +
-'font-weight:bold;' +
-'}' +
-
-'.wait{' +
-'color:#999;' +
-'}' +
-
-'@media print{' +
-'.table-title{' +
-'page-break-after:avoid;' +
-'}' +
-'}' +
-
-'</style>' +
-'</head>' +
-'<body>' +
-
-'<h1>' + COUPLE + '</h1>' +
-
-'<div class="summary">' +
-'<strong>Total invités :</strong> ' + totalGuests +
-' &nbsp;&nbsp; | &nbsp;&nbsp; ' +
-'<strong>Arrivés :</strong> ' + totalArrived +
-'</div>' +
-
-html +
-
-'<script>' +
-'window.onload=function(){window.print();}' +
-'<\/script>' +
-
-'</body>' +
-'</html>'
-```
-
-);
-
-w.document.close();
-
-notify("Impression lancée", "inf");
-}
-
 
 // ── PHOTO HERO ──
 function dragOver(e)  { e.preventDefault(); $("photoDrop").classList.add("drag"); }
