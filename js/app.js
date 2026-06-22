@@ -855,15 +855,19 @@ async function genPDF(id) {
     D.deco(CX, y, 430, accentD);
 
     const programme = [
-      { heure: "14h00", titre: "Accueil des Invités",    detail: "Installation et rafraîchissements",  icon: "👥" },
-      { heure: "15h00", titre: "Cérémonie Religieuse",   detail: "Union bénie devant Dieu",             icon: "⛪" },
-      { heure: "17h00", titre: "Séance Photo",            detail: "Avec les mariés et invités",          icon: "📸" },
-      { heure: "18h00", titre: "Cocktail",                detail: "Moment de convivialité",              icon: "🥂" },
-      { heure: "19h30", titre: "Dîner de Gala",           detail: "Repas servi avec élégance",           icon: "🍽️" },
-      { heure: "21h00", titre: "Ouverture du Bal",        detail: "Première danse des mariés",           icon: "💃" },
-      { heure: "22h00", titre: "Animations & Festivités", detail: "Ambiance assurée",                    icon: "🎵" },
-      { heure: "00h00", titre: "Clôture Officielle",      detail: "Fin de cette journée inoubliable",    icon: "🎆" },
-    ];
+  { heure: "17h00", titre: "Accueil des Invités",         detail: "Installation des invités",                          icon: "👥" },
+  { heure: "17h45", titre: "Cocktail & Mignardises",       detail: "Dégustation et canapés dans le jardin illuminé",    icon: "🥂" },
+  { heure: "19h00", titre: "Entrée Solennelle",            detail: "Installation des mariés",                           icon: "👰" },
+  { heure: "19h15", titre: "Mots de Bienvenue",            detail: "Discours des deux chefs de familles",               icon: "🎤" },
+  { heure: "19h30", titre: "Intermèdes",                   detail: "Prestations à l'honneur des mariés",                icon: "🎶" },
+  { heure: "20h00", titre: "Prière de Bénédiction",        detail: "Bénédiction du repas",                              icon: "🙏" },
+  { heure: "20h05", titre: "Dîner de Gala",                detail: "Menus gastronomiques aux couleurs de l'Afrique",    icon: "🍽️" },
+  { heure: "21h05", titre: "Remise des Présents",          detail: "Cadeaux offerts aux mariés",                        icon: "🎁" },
+  { heure: "21h30", titre: "Pièce Montée & Discours",      detail: "Entrée de la pièce montée",                         icon: "🎂" },
+  { heure: "21h40", titre: "Coupure du Gâteau",            detail: "Toast des mariés",                                  icon: "🥂" },
+  { heure: "22h00", titre: "Tour d'Honneur",               detail: "Tour d'honneur des mariés",                         icon: "💃" },
+  { heure: "22h30", titre: "Piste Libre",                  detail: "Soirée dansante jusqu'au matin",                    icon: "🎵" },
+];
 
     y += 45;
     const progStartY = y;
