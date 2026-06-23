@@ -782,7 +782,11 @@ async function genPDF(id) {
     ctx.fillText("♛", CX, y - 8);
     D.noShadow();
     ctx.restore();
-    ctx.drawImage(qrImg, qrX, y, qrSize, qrSize);
+// Fond blanc avec marge pour la "quiet zone" du QR (obligatoire pour le scan)
+const quietZone = 30;
+ctx.fillStyle = "#FFFFFF";
+ctx.fillRect(qrX - quietZone, y - quietZone, qrSize + quietZone * 2, qrSize + quietZone * 2);
+ctx.drawImage(qrImg, qrX, y, qrSize, qrSize);
 
     y += qrSize + 44;
     D.txt("SCANNEZ POUR CONFIRMER VOTRE PRÉSENCE", CX, y,
@@ -961,7 +965,11 @@ async function genPDF(id) {
     D.rect(qrLX - 24, y - 36, qrS + 48, qrS + 82, "rgba(20,8,2,0.85)", accent, 4, 16);
     D.txt("SCANNEZ POUR LOCALISER LE LIEU", CX, y - 8,
       `${Math.floor(W * 0.0155)}px Georgia, serif`, accentD, "center");
-    ctx.drawImage(qrLocImg, qrLX, y, qrS, qrS);
+// Fond blanc avec marge pour la "quiet zone" du QR (obligatoire pour le scan)
+const quietZoneLoc = 25;
+ctx.fillStyle = "#FFFFFF";
+ctx.fillRect(qrLX - quietZoneLoc, y - quietZoneLoc, qrS + quietZoneLoc * 2, qrS + quietZoneLoc * 2);
+ctx.drawImage(qrLocImg, qrLX, y, qrS, qrS);
 
     y += qrS + 48;
     D.deco(CX, y, 300, accentD);
