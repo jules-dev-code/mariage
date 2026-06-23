@@ -430,28 +430,117 @@ async function delGuest(id) {
   }
 }
 
-// ── WHATSAPP DIRECT ──
 function sendWA(id) {
-  var g = guests.find(function(x){ return x.id===id; });
-  if (!g) return;
-  var msg = g.ar
-    ? "Cher(e) "+g.ti+" "+fn(g)+",\n\nNous tenions a vous remercier chaleureusement d'avoir partage ce moment si precieux avec nous. Votre presence a rendu cette soiree inoubliable.\n\nAvec tout notre amour,\n"+COUPLE
-    : "Bonjour "+g.ti+" "+fn(g)+" !\n\nNous vous attendons avec impatience ce soir.\n\nLieu : "+VENUE+"\nTable N "+g.tb+" — Zone "+zlbl(g.zn)+"\nAccueil des 16h30\n\n"+COUPLE;
-  if (g.phone) {
-    var phone = g.phone.replace(/[\s\-\(\)]/g,"");
-    window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank");
-  } else {
-    window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
-    notify("Pas de numero — ajoutez le telephone de l'invite","inf");
-  }
-  notify("WhatsApp ouvert","wa");
+
+var g = guests.find(function(x){
+return x.id === id;
+});
+
+if (!g) return;
+
+var msg = g.ar
+
+```
+? "Cher(e) " + g.ti + " " + fn(g) + ",\n\n" +
+
+  "À l'issue de cette magnifique célébration, nous tenions à vous exprimer toute notre reconnaissance pour l'honneur que vous nous avez fait en partageant cette journée si importante de notre vie.\n\n" +
+
+  "Votre présence, vos sourires, vos attentions et votre bienveillance ont contribué à faire de notre mariage un moment d'une rare beauté, que nous garderons précieusement dans nos cœurs.\n\n" +
+
+  "Nous vous remercions sincèrement d'avoir participé à l'écriture de ce chapitre inoubliable de notre histoire.\n\n" +
+
+  "Que Dieu vous bénisse abondamment et vous accorde autant de bonheur que celui que vous nous avez offert par votre présence.\n\n" +
+
+  "Avec toute notre affection et notre profonde gratitude,\n\n" +
+
+  "*_" + COUPLE + "_*"
+
+: "Bonjour " + g.ti + " " + fn(g) + ",\n\n" +
+
+  "Nous espérons que vous allez bien.\n\n" +
+
+  "Le comité d'organisation du mariage de *_" + COUPLE + "_* est heureux de vous compter parmi nos invités pour cette célébration exceptionnelle.\n\n" +
+
+  "Nous vous attendons avec grand plaisir le *26 juin 2026* à partir de *16h30* pour partager ensemble ce moment unique de joie, d'amour et de convivialité.\n\n" +
+
+  "📍 Lieu : " + VENUE + "\n" +
+  "🎟️ Table N° " + g.tb + " — Zone " + zlbl(g.zn) + "\n\n" +
+
+  "Votre billet d'invitation personnel est joint à ce message. Nous vous invitons à le conserver et à le présenter à l'accueil le jour de l'événement.\n\n" +
+
+  "Nous restons à votre disposition pour toute information complémentaire.\n\n" +
+
+  "Au plaisir de vous accueillir.\n\n" +
+
+  "Cordialement,\n" +
+  "Le comité d'organisation\n\n" +
+
+  "*_" + COUPLE + "_*";
+```
+
+if (g.phone) {
+
+```
+var phone = g.phone.replace(/[\s\-\(\)]/g,"");
+
+window.open(
+  "https://wa.me/" +
+  phone +
+  "?text=" +
+  encodeURIComponent(msg),
+  "_blank"
+);
+```
+
+} else {
+
+```
+window.open(
+  "https://wa.me/?text=" +
+  encodeURIComponent(msg),
+  "_blank"
+);
+
+notify(
+  "Pas de numero — ajoutez le telephone de l'invite",
+  "inf"
+);
+```
+
+}
+
+notify("WhatsApp ouvert","wa");
 }
 
 function groupWA() {
-  var msg = "Chers amis, chere famille,\n\nMerci infiniment d'avoir ete presents a notre mariage. Votre amour a rendu cette nuit absolument magique.\n\nAvec tout notre amour,\n"+COUPLE;
-  window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank");
-  notify("Message groupe ouvert","wa");
+
+var msg =
+
+```
+"Chers membres de notre famille, chers amis,\n\n" +
+
+"Quelques jours après cette magnifique célébration, nous tenions à vous adresser nos plus sincères remerciements.\n\n" +
+
+"Votre présence, votre affection, vos prières, vos encouragements et tous les moments partagés à nos côtés ont contribué à faire de notre mariage un souvenir exceptionnel que nous garderons précieusement toute notre vie.\n\n" +
+
+"Merci d'avoir participé à cette journée si importante pour nous et d'avoir rendu cette fête aussi chaleureuse et mémorable.\n\n" +
+
+"Que Dieu vous bénisse abondamment ainsi que vos familles.\n\n" +
+
+"Avec toute notre affection et notre gratitude,\n\n" +
+
+"*_" + COUPLE + "_*";
+```
+
+window.open(
+"https://wa.me/?text=" +
+encodeURIComponent(msg),
+"_blank"
+);
+
+notify("Message groupe ouvert","wa");
 }
+
 
 // ── BILLET PDF LUXUEUX ──
 /**
