@@ -435,25 +435,12 @@ function sendWA(id) {
   var g = guests.find(function(x){ return x.id===id; });
   if (!g) return;
   var msg = g.ar
-"Cher(e) " + g.ti + " " + fn(g) + ",\n\n" +
-
-"À l'issue de cette magnifique célébration, nous tenions à vous exprimer toute notre reconnaissance pour l'honneur que vous nous avez fait en partageant cette journée si importante de notre vie.\n\n" +
-
-"Votre présence, vos sourires, vos attentions et votre bienveillance ont contribué à faire de notre mariage un moment d'une rare beauté, que nous garderons précieusement dans nos cœurs.\n\n" +
-
-"Nous vous remercions sincèrement d'avoir participé à l'écriture de ce chapitre inoubliable de notre histoire.\n\n" +
-
-"Que Dieu vous bénisse abondamment et vous accorde autant de bonheur que celui que vous nous avez offert par votre présence.\n\n" +
-
-"Avec toute notre affection et notre profonde gratitude,\n\n" +
-
-"**Vanina & Yvan**"
-
+    ? "Cher(e) "+g.ti+" "+fn(g)+",\n\nNous tenions a vous remercier chaleureusement d'avoir partage ce moment si precieux avec nous. Votre presence a rendu cette soiree inoubliable.\n\nAvec tout notre amour,\n"+COUPLE
 "Bonjour " + g.ti + " " + fn(g) + ",\n\n" +
 
 "Nous espérons que vous allez bien.\n\n" +
 
-"Le service protocolaire et organisationnel du mariage de *Vanina & Yvan* est heureux de vous compter parmi nos invités pour cette célébration exceptionnelle.\n\n" +
+"Le comité d'organisation du mariage de *Vanina & Yvan* est heureux de vous compter parmi nos invités pour cette célébration exceptionnelle.\n\n" +
 
 "Nous vous attendons avec grand plaisir le *26 juin 2026* à partir de *16h30* pour partager ensemble ce moment unique de joie, d'amour et de convivialité.\n\n" +
 
@@ -464,9 +451,8 @@ function sendWA(id) {
 
 "Au plaisir de vous accueillir.\n\n" +
 
-"*_" + COUPLE + "_*";
-
-if (g.phone) {
+"*_Vanina & Yvan_*";
+  if (g.phone) {
     var phone = g.phone.replace(/[\s\-\(\)]/g,"");
     window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank");
   } else {
