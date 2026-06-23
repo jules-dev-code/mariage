@@ -159,6 +159,13 @@
         </div>
         <button class="btn btn-burn mt10" style="width:100%;padding:12px" onclick="toggleScan()"><span id="scanTxt">▶ Démarrer le scanner</span></button>
       </div>
+      <!-- CONFIRMATION SCAN -->
+<div id="scanConfirm" class="scan-confirm-overlay">
+  <div class="scan-confirm-vy">VY</div>
+  <div class="scan-confirm-name" id="scanConfirmName"></div>
+  <div class="scan-confirm-table" id="scanConfirmTable"></div>
+  <button class="scan-confirm-close" onclick="closeScanConfirm()">Fermer</button>
+</div>
       <div>
         <div class="panel-title">➕ Ajouter un invité</div>
         <div class="form-row">

@@ -1052,23 +1052,26 @@ function onScan(decoded) {
       : decoded;
     var g = guests.find(function(x){ return x.id===invId; });
     if (!g) {
-      $("scanNm").textContent = "Invite introuvable";
-      $("scanDt").textContent = "QR non reconnu";
-      $("scanAct").innerHTML  = "";
-      $("scanRes").style.display = "block";
       notify("QR non reconnu","err");
       return;
     }
-    $("scanRes").style.display = "block";
-    $("scanNm").textContent = g.ti+" "+g.fn+" "+g.ln;
-    $("scanDt").textContent = "Table N "+g.tb+" · "+zlbl(g.zn)+" · "+(g.ar?"Deja enregistre":"En attente");
-    $("scanAct").innerHTML = g.ar
-      ? '<button class="btn btn-ghost" style="width:100%;padding:10px;margin-top:8px" onclick="toggleArrival(\''+g.id+'\')">Annuler arrivee</button>'
-      : '<button class="btn btn-burn" style="width:100%;padding:10px;margin-top:8px" onclick="toggleArrival(\''+g.id+'\')">Confirmer l arrivee</button>';
-    notify(g.ar ? fn(g)+" — deja enregistre" : "OK "+fn(g)+" — Table "+g.tb, g.ar?"inf":"ok");
+    // Confirmer automatiquement l'arrivée si pas déjà fait
+    if (!g.ar) {
+      toggleArrival(invId);
+    }
+    // Afficher la page de confirmation plein écran
+    $("scanConfirmName").textContent = g.ti+" "+g.fn+" "+g.ln;
+    $("scanConfirmTable").textContent = "Table N° "+g.tb+" · "+zlbl(g.zn);
+    $("scanConfirm").classList.add("open");
+    if (scanOn) stopScan();
   } catch(e) {
     notify("Erreur lecture QR","err");
   }
+}
+
+function closeScanConfirm() {
+  $("scanConfirm").classList.remove("open");
+  startScan();
 }
 
 // ── EXPORT CSV ──
