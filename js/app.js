@@ -436,22 +436,7 @@ function sendWA(id) {
   if (!g) return;
   var msg = g.ar
     ? "Cher(e) "+g.ti+" "+fn(g)+",\n\nNous tenions a vous remercier chaleureusement d'avoir partage ce moment si precieux avec nous. Votre presence a rendu cette soiree inoubliable.\n\nAvec tout notre amour,\n"+COUPLE
-"Bonjour " + g.ti + " " + fn(g) + ",\n\n" +
-
-"Nous espérons que vous allez bien.\n\n" +
-
-"Le comité d'organisation du mariage de *Vanina & Yvan* est heureux de vous compter parmi nos invités pour cette célébration exceptionnelle.\n\n" +
-
-"Nous vous attendons avec grand plaisir le *26 juin 2026* à partir de *16h30* pour partager ensemble ce moment unique de joie, d'amour et de convivialité.\n\n" +
-
-"Lieu : " + VENUE + "\n" +
-"Table N° " + g.tb + " — Zone " + zlbl(g.zn) + "\n\n" +
-
-"Votre billet d'invitation personnel est joint à ce message. Nous vous invitons à le conserver et à le présenter à l'accueil le jour de l'événement.\n\n" +
-
-"Au plaisir de vous accueillir.\n\n" +
-
-"*_Vanina & Yvan_*";
+    : "Bonjour "+g.ti+" "+fn(g)+" !\n\nNous vous attendons avec impatience ce soir.\n\nLieu : "+VENUE+"\nTable N "+g.tb+" — Zone "+zlbl(g.zn)+"\nAccueil des 16h30\n\n"+COUPLE;
   if (g.phone) {
     var phone = g.phone.replace(/[\s\-\(\)]/g,"");
     window.open("https://wa.me/"+phone+"?text="+encodeURIComponent(msg),"_blank");
