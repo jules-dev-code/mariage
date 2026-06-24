@@ -456,24 +456,35 @@ function sendWA(id) {
 
     : "Bonjour " + g.ti + " " + fn(g) + ",\n\n" +
 
-      "Nous espérons que vous allez bien.\n\n" +
+"Nous espérons que vous allez bien.\n\n" +
 
-      "Le comité d'organisation du mariage de *_" + COUPLE + "_* est heureux de vous compter parmi nos invités pour cette célébration exceptionnelle.\n\n" +
+"Le comité d'organisation du mariage de **"+COUPLE+"** est heureux de vous compter parmi les invités de cette célébration exceptionnelle.\n\n" +
 
-      "Nous vous attendons avec grand plaisir le *26 juin 2026* à partir de *16h30* pour partager ensemble ce moment unique de joie, d'amour et de convivialité.\n\n" +
+"Nous aurons le plaisir de vous accueillir le *27 juin 2026* pour partager avec nous cette journée mémorable.\n\n" +
 
-      "📍 Lieu : " + VENUE + "\n" +
-      "🎟️ Table N° " + g.tb + " — Zone " + zlbl(g.zn) + "\n\n" +
+"📍 *Cérémonie civile (Mairie)* : 13h00\n" +
+"📍 *Réception & soirée* : à partir de 16h30\n\n" +
 
-      "Votre billet d'invitation personnel est joint à ce message. Nous vous invitons à le conserver et à le présenter à l'accueil le jour de l'événement.\n\n" +
+"🎟️ *Votre placement*\n" +
+"Table N° " + g.tb + " — Zone " + zlbl(g.zn) + "\n\n" +
 
-      "Nous restons à votre disposition pour toute information complémentaire.\n\n" +
+"📌 *Lieu de réception*\n" +
+VENUE + "\n\n" +
 
-      "Au plaisir de vous accueillir.\n\n" +
+"🌐 *Informations pratiques & suivi de l'événement*\n" +
+"https://mariage-beugueum-8494s-projects.vercel.app/\n\n" +
 
-      "Cordialement,\nLe comité d'organisation\n\n" +
+"Votre billet d'invitation personnel est joint à ce message. Nous vous invitons à le conserver précieusement et à le présenter à l'accueil le jour de l'événement.\n\n" +
 
-      "*_" + COUPLE + "_*";
+"Nous restons à votre disposition pour toute information complémentaire.\n\n" +
+
+"Au plaisir de vous accueillir et de partager ce moment unique avec vous.\n\n" +
+
+"Cordialement,\n" +
+"Le comité d'organisation\n\n" +
+
+"**" + COUPLE + "**";
+
 
   if (g.phone) {
 
