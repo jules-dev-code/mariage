@@ -78,7 +78,7 @@
   <span class="lbl">◆ Déroulé de la soirée ◆</span>
   <h2 class="ttl ttl-w">Programme</h2>
   <div class="gbar"></div>
-<div class="timeline">
+  <div class="timeline">
     <div class="tl-item"><div class="tl-time"><span>17:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Accueil des invités</h3><p>Installation des invités</p></div></div>
     <div class="tl-item"><div class="tl-time"><span>17:45</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Cocktail &amp; mignardises</h3><p>Dégustation et canapés dans le jardin illuminé</p></div></div>
     <div class="tl-item"><div class="tl-time"><span>19:00</span></div><div class="tl-dot"></div><div class="tl-body"><h3>Entrée solennelle</h3><p>Installation des mariés</p></div></div>
@@ -159,13 +159,6 @@
         </div>
         <button class="btn btn-burn mt10" style="width:100%;padding:12px" onclick="toggleScan()"><span id="scanTxt">▶ Démarrer le scanner</span></button>
       </div>
-      <!-- CONFIRMATION SCAN -->
-<div id="scanConfirm" class="scan-confirm-overlay">
-  <div class="scan-confirm-vy">VY</div>
-  <div class="scan-confirm-name" id="scanConfirmName"></div>
-  <div class="scan-confirm-table" id="scanConfirmTable"></div>
-  <button class="scan-confirm-close" onclick="closeScanConfirm()">Fermer</button>
-</div>
       <div>
         <div class="panel-title">➕ Ajouter un invité</div>
         <div class="form-row">
@@ -176,36 +169,32 @@
           <div class="fgrp"><label class="flbl">Civilité</label><select class="fctl" id="nTi"><option>M.</option><option>Mme</option><option>Dr</option><option>Pr</option><option>M. &amp; Mme</option></select></div>
           <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="nTb" type="number" placeholder="1" min="1" max="30"></div>
         </div>
-<div class="fgrp">
-  <label class="flbl">Zone</label>
-  <select class="fctl" id="nZn">
-
-    <option value="vip1">VIP 1</option>
-    <option value="vip2">VIP 2</option>
-    <option value="vip3">VIP 3</option>
-    <option value="vip4">VIP 4</option>
-    <option value="vip5">VIP 5</option>
-
-    <option value="france">FRANCE</option>
-    <option value="espagne">ESPAGNE</option>
-    <option value="etatsunis">ÉTATS-UNIS</option>
-    <option value="italie">ITALIE</option>
-    <option value="turquie">TURQUIE</option>
-    <option value="chine">CHINE</option>
-    <option value="allemagne">ALLEMAGNE</option>
-    <option value="promonova">PROMONOVA</option>
-    <option value="japon">JAPON</option>
-    <option value="canada">CANADA</option>
-    <option value="australie">AUSTRALIE</option>
-
-    <option value="bresil">BRÉSIL</option>
-    <option value="maroc">MAROC</option>
-    <option value="royaumeuni">ROYAUME-UNI</option>
-    <option value="suisse">SUISSE</option>
-    <option value="belgique">BELGIQUE</option>
-
-  </select>
-</div>
+        <div class="fgrp">
+          <label class="flbl">Zone</label>
+          <select class="fctl" id="nZn">
+            <option value="vip1">VIP 1</option>
+            <option value="vip2">VIP 2</option>
+            <option value="vip3">VIP 3</option>
+            <option value="vip4">VIP 4</option>
+            <option value="vip5">VIP 5</option>
+            <option value="france">FRANCE</option>
+            <option value="espagne">ESPAGNE</option>
+            <option value="etatsunis">ÉTATS-UNIS</option>
+            <option value="italie">ITALIE</option>
+            <option value="turquie">TURQUIE</option>
+            <option value="chine">CHINE</option>
+            <option value="allemagne">ALLEMAGNE</option>
+            <option value="promonova">PROMONOVA</option>
+            <option value="japon">JAPON</option>
+            <option value="canada">CANADA</option>
+            <option value="australie">AUSTRALIE</option>
+            <option value="bresil">BRÉSIL</option>
+            <option value="maroc">MAROC</option>
+            <option value="royaumeuni">ROYAUME-UNI</option>
+            <option value="suisse">SUISSE</option>
+            <option value="belgique">BELGIQUE</option>
+          </select>
+        </div>
         <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="nDt"><option value="">Standard</option><option value="Végétarien">Végétarien</option><option value="Végane">Végane</option><option value="Halal">Halal</option><option value="Casher">Casher</option><option value="Sans gluten">Sans gluten</option></select></div>
         <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="nNt" type="text" placeholder="Témoin, vient de loin..."></div>
         <div class="fgrp"><label class="flbl">📱 Téléphone WhatsApp</label><input class="fctl" id="nPhone" type="tel" placeholder="+237 6XX XX XX XX"></div>
@@ -216,7 +205,7 @@
         <div style="display:flex;flex-direction:column;gap:8px">
           <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="exportCSV()">↓ Exporter la liste (CSV)</button>
           <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="printList()">🖨 Imprimer la liste physique</button>
-          <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="groupWA()">💬 WhatsApp remerciements groupé</button>
+          <button class="btn btn-ghost" style="width:100%;padding:12px;text-align:left" onclick="openRemerciements()">💬 Envoyer les remerciements</button>
         </div>
       </div>
       <div>
@@ -255,32 +244,32 @@
       <div class="fgrp"><label class="flbl">Civilité</label><select class="fctl" id="eTi"><option>M.</option><option>Mme</option><option>Dr</option><option>Pr</option><option>M. &amp; Mme</option></select></div>
       <div class="fgrp"><label class="flbl">Table N°</label><input class="fctl" id="eTb" type="number" min="1" max="30"></div>
     </div>
-<select class="fctl" id="eZn">
-  <option value="vip1">VIP 1</option>
-  <option value="vip2">VIP 2</option>
-  <option value="vip3">VIP 3</option>
-  <option value="vip4">VIP 4</option>
-  <option value="vip5">VIP 5</option>
-
-  <option value="france">FRANCE</option>
-  <option value="espagne">ESPAGNE</option>
-  <option value="etatsunis">ÉTATS-UNIS</option>
-  <option value="italie">ITALIE</option>
-  <option value="turquie">TURQUIE</option>
-  <option value="chine">CHINE</option>
-  <option value="allemagne">ALLEMAGNE</option>
-  <option value="promonova">PROMONOVA</option>
-  <option value="japon">JAPON</option>
-  <option value="canada">CANADA</option>
-  <option value="australie">AUSTRALIE</option>
-
-  <option value="bresil">BRÉSIL</option>
-  <option value="maroc">MAROC</option>
-  <option value="royaumeuni">ROYAUME-UNI</option>
-  <option value="suisse">SUISSE</option>
-  <option value="belgique">BELGIQUE</option>
-
-</select>
+    <div class="fgrp">
+      <label class="flbl">Zone</label>
+      <select class="fctl" id="eZn">
+        <option value="vip1">VIP 1</option>
+        <option value="vip2">VIP 2</option>
+        <option value="vip3">VIP 3</option>
+        <option value="vip4">VIP 4</option>
+        <option value="vip5">VIP 5</option>
+        <option value="france">FRANCE</option>
+        <option value="espagne">ESPAGNE</option>
+        <option value="etatsunis">ÉTATS-UNIS</option>
+        <option value="italie">ITALIE</option>
+        <option value="turquie">TURQUIE</option>
+        <option value="chine">CHINE</option>
+        <option value="allemagne">ALLEMAGNE</option>
+        <option value="promonova">PROMONOVA</option>
+        <option value="japon">JAPON</option>
+        <option value="canada">CANADA</option>
+        <option value="australie">AUSTRALIE</option>
+        <option value="bresil">BRÉSIL</option>
+        <option value="maroc">MAROC</option>
+        <option value="royaumeuni">ROYAUME-UNI</option>
+        <option value="suisse">SUISSE</option>
+        <option value="belgique">BELGIQUE</option>
+      </select>
+    </div>
     <div class="fgrp"><label class="flbl">Régime</label><select class="fctl" id="eDt"><option value="">Standard</option><option value="Végétarien">Végétarien</option><option value="Végane">Végane</option><option value="Halal">Halal</option><option value="Casher">Casher</option><option value="Sans gluten">Sans gluten</option></select></div>
     <div class="fgrp"><label class="flbl">Note privée</label><input class="fctl" id="eNt" type="text"></div>
     <div class="fgrp"><label class="flbl">📱 Téléphone WhatsApp</label><input class="fctl" id="ePhone" type="tel" placeholder="+237 6XX XX XX XX"></div>
@@ -302,6 +291,41 @@
     <div class="photo-drop-txt">Glissez votre photo ici<br>ou cliquez pour choisir<span>JPG · PNG · WEBP</span></div>
     <button class="photo-remove" id="photoRemove" onclick="removePhoto(event)">✕ Retirer la photo</button>
   </div>
+</div>
+
+<!-- CONFIRMATION SCAN -->
+<div id="scanConfirm" class="scan-confirm-overlay">
+  <div class="scan-confirm-vy">VY</div>
+  <div class="scan-confirm-name" id="scanConfirmName"></div>
+  <div class="scan-confirm-table" id="scanConfirmTable"></div>
+  <button class="scan-confirm-close" onclick="closeScanConfirm()">Fermer</button>
+</div>
+
+<!-- PAGE REMERCIEMENTS -->
+<div id="remPage" class="rem-overlay">
+  <div class="rem-header">
+    <div class="rem-title">💬 Envoi des Remerciements</div>
+    <div class="rem-stats">
+      <span id="remSent">0</span> envoyés &nbsp;·&nbsp;
+      <span id="remPending">0</span> en attente
+    </div>
+    <button class="adm-close" onclick="closeRemerciements()">✕ Fermer</button>
+  </div>
+  <div class="rem-message-box">
+    <div class="rem-message-label">✏️ Message (personnalisable)</div>
+    <textarea id="remMsg" class="rem-textarea">Cher(e) {titre} {prenom} {nom},
+
+C'est avec une immense gratitude que nous vous remercions d'avoir partagé ce moment si précieux avec nous.
+
+Votre présence a rendu notre mariage inoubliable. Merci du fond du cœur.
+
+Avec tout notre amour,
+Vanina & Yvan 💕</textarea>
+  </div>
+  <div class="rem-progress-bar">
+    <div class="rem-prog-fill" id="remProgFill" style="width:0%"></div>
+  </div>
+  <div id="remList" class="rem-list"></div>
 </div>
 
 <div class="notif" id="notif"></div>

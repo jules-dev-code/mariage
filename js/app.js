@@ -1294,3 +1294,121 @@ document.addEventListener("DOMContentLoaded", function(){
     }, 2500);
   }
 });
+// ── REMERCIEMENTS ──
+var remSentIds = [];
+
+function openRemerciements() {
+  remSentIds = [];
+  renderRemList();
+  $("remPage").classList.add("open");
+}
+
+function closeRemerciements() {
+  $("remPage").classList.remove("open");
+}
+
+function renderRemList() {
+  var sent   = remSentIds.length;
+  var total  = guests.length;
+  var pct    = total ? Math.round(sent / total * 100) : 0;
+
+  $("remSent").textContent    = sent;
+  $("remPending").textContent = total - sent;
+  $("remProgFill").style.width = pct + "%";
+
+  var html = "";
+  guests.slice().sort(function(a, b) {
+    return a.ln.localeCompare(b.ln) || a.fn.localeCompare(b.fn);
+  }).forEach(function(g) {
+    var isSent   = remSentIds.includes(g.id);
+    var initials = (g.fn[0] + g.ln[0]).toUpperCase();
+    var hasPhone = g.phone && g.phone.trim() !== "";
+
+    html += '<div class="rem-card ' + (isSent ? "sent" : "") + '" id="remcard-' + g.id + '">' +
+      '<div class="rem-card-avatar">' + initials + '</div>' +
+      '<div class="rem-card-info">' +
+        '<div class="rem-card-name">' + g.ti + ' ' + g.fn + ' ' + g.ln + '</div>' +
+        '<div class="rem-card-meta">Table ' + g.tb + ' · ' + zlbl(g.zn) + (hasPhone ? ' · ' + g.phone : ' · Pas de numéro') + '</div>' +
+      '</div>' +
+      '<span class="rem-card-status ' + (isSent ? "sent-lbl" : "pending") + '">' + (isSent ? "✓ Envoyé" : "En attente") + '</span>' +
+      (hasPhone
+        ? '<button class="rem-btn-wa" ' + (isSent ? 'disabled' : '') + ' onclick="sendRemWA(\'' + g.id + '\')">' + (isSent ? "✓ Envoyé" : "📱 Envoyer") + '</button>'
+        : '<button class="rem-btn-wa" disabled style="background:#555">Pas de n°</button>'
+      ) +
+    '</div>';
+  });
+
+  $("remList").innerHTML = html;
+}
+
+// ── REMERCIEMENTS ──
+var remSentIds = [];
+
+function openRemerciements() {
+  remSentIds = [];
+  renderRemList();
+  $("remPage").classList.add("open");
+}
+
+function closeRemerciements() {
+  $("remPage").classList.remove("open");
+}
+
+function renderRemList() {
+  var sent    = remSentIds.length;
+  var total   = guests.length;
+  var pct     = total ? Math.round(sent / total * 100) : 0;
+
+  $("remSent").textContent     = sent;
+  $("remPending").textContent  = total - sent;
+  $("remProgFill").style.width = pct + "%";
+
+  var html = "";
+  guests.slice().sort(function(a, b) {
+    return a.ln.localeCompare(b.ln) || a.fn.localeCompare(b.fn);
+  }).forEach(function(g) {
+    var isSent   = remSentIds.includes(g.id);
+    var initials = (g.fn[0] + g.ln[0]).toUpperCase();
+    var hasPhone = g.phone && g.phone.trim() !== "";
+
+    html += '<div class="rem-card ' + (isSent ? "sent" : "") + '" id="remcard-' + g.id + '">' +
+      '<div class="rem-card-avatar">' + initials + '</div>' +
+      '<div class="rem-card-info">' +
+        '<div class="rem-card-name">' + g.ti + ' ' + g.fn + ' ' + g.ln + '</div>' +
+        '<div class="rem-card-meta">Table ' + g.tb + ' · ' + zlbl(g.zn) + (hasPhone ? ' · ' + g.phone : ' · Pas de numéro') + '</div>' +
+      '</div>' +
+      '<span class="rem-card-status ' + (isSent ? "sent-lbl" : "pending") + '">' + (isSent ? "✓ Envoyé" : "En attente") + '</span>' +
+      (hasPhone
+        ? '<button class="rem-btn-wa" ' + (isSent ? 'disabled' : '') + ' onclick="sendRemWA(\'' + g.id + '\')">' + (isSent ? "✓ Envoyé" : "📱 Envoyer") + '</button>'
+        : '<button class="rem-btn-wa" disabled style="background:#555">Pas de n°</button>'
+      ) +
+    '</div>';
+  });
+
+  $("remList").innerHTML = html;
+}
+
+function sendRemWA(id) {
+  var g = guests.find(function(x){ return x.id === id; });
+  if (!g || !g.phone) return;
+
+  var msg =
+    "Cher(e) " + g.ti + " " + g.fn + " " + g.ln + " 🙏\n\n" +
+    "Quelques jours après cette magnifique célébration, nous tenions à vous adresser nos plus sincères remerciements.\n\n" +
+    "Votre présence, votre affection, vos prières, vos encouragements et tous les moments partagés à nos côtés ont contribué à faire de notre mariage un souvenir exceptionnel que nous garderons précieusement toute notre vie.\n\n" +
+    "Merci d'avoir participé à cette journée si importante pour nous et d'avoir rendu cette fête aussi chaleureuse et mémorable. 💕\n\n" +
+    "Que Dieu vous bénisse abondamment ainsi que vos familles. 🙌\n\n" +
+    "Avec toute notre affection et notre profonde gratitude,\n\n" +
+    "*_" + COUPLE + "_*";
+
+  var phone = g.phone.replace(/[\s\-\(\)\+]/g, "");
+  if (!phone.startsWith("237") && !phone.startsWith("00")) {
+    phone = "237" + phone;
+  }
+
+  window.open("https://wa.me/" + phone + "?text=" + encodeURIComponent(msg), "_blank");
+
+  remSentIds.push(id);
+  renderRemList();
+  notify("Message ouvert pour " + g.fn + " " + g.ln, "ok");
+}
